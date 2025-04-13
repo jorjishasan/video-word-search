@@ -4,9 +4,7 @@ import SearchTabs from './SearchTabs';
 import extensionLogo from '../assets/extensionLogo.svg';
 
 const Container = styled.div`
-  position: fixed;
-  top: 20px;
-  right: 20px;
+
   display: flex;
   flex-direction: column;
   align-items: flex-end;
@@ -14,33 +12,30 @@ const Container = styled.div`
 
 const ToggleButton = styled.button`
   width: 48px;
-  height: 48px;
-  border-radius: 8px;
+  border-radius: 8px 8px 0 0;
   background-color: #ff0044;
   border: none;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 12px;
+  overflow: hidden;
 
   img {
     width: 100%;
-    height: 100%;
+    height: 60%;
     object-fit: contain;
+    margin-top: -2px;
   }
 `;
 
 const SearchPanel = styled.div`
-  margin-top: 10px;
+
   width: 600px;
   opacity: ${props => props.$isVisible ? 1 : 0};
   transform: ${props => props.$isVisible ? 'translateY(0)' : 'translateY(-20px)'};
   transition: all 0.3s ease;
-  visibility: ${props => props.$isVisible ? 'visible' : 'hidden'};
-  background: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  display: ${props => props.$isVisible ? 'block' : 'none'};
 `;
 
 const UI = () => {
