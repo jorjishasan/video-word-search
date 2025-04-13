@@ -81,6 +81,20 @@ const ResultsContainer = styled.div`
   }
 `;
 
+const LoadingContainer = styled.div`
+  padding: 20px;
+  text-align: center;
+  color: #999;
+  background-color: #1a1a1a;
+`;
+
+const ErrorContainer = styled.div`
+  padding: 20px;
+  text-align: center;
+  color: #ff6b6b;
+  background-color: #1a1a1a;
+`;
+
 const SearchTabs = () => {
   const { 
     activeTab, 
@@ -88,7 +102,9 @@ const SearchTabs = () => {
     searchWord, 
     setSearchWord, 
     results, 
-    handleSearch
+    handleSearch,
+    loading,
+    error
   } = useSearch();
 
   const tabs = [
@@ -104,11 +120,24 @@ const SearchTabs = () => {
   };
 
   const renderResults = () => {
+    // Show loading state
+    if (loading && activeTab === 0) {
+      return <LoadingContainer>Loading transcript data...</LoadingContainer>;
+    }
+    
+    // Show error state
+    if (error && activeTab === 0) {
+      return <ErrorContainer>{error}</ErrorContainer>;
+    }
+    
+    // Show results if available
     if (!results) return null;
 
     switch (results.type) {
       case 'wordSearch':
-        return <WordSearchResult results={results.data} />;
+        return results.data.length === 0 ? 
+          <LoadingContainer>No matches found for "{searchWord}"</LoadingContainer> :
+          <WordSearchResult results={results.data} />;
       case 'insights':
         return <InsightsResult results={results.data} />;
       case 'autoSearch':
