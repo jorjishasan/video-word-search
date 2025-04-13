@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { wordSearchResults, insightsResults, autoSearchResults } from '../data/mockData';
+import { useTranscriptSearch } from '../hooks/useTranscriptSearch';
 
 const SearchContext = createContext();
 
@@ -36,6 +36,9 @@ export const SearchProvider = ({ children }) => {
   const lastActiveTab = parseInt(localStorage.getItem('lastActiveTab') || '0');
   const [activeTab, setActiveTab] = useState(lastActiveTab);
   const [tabStates, setTabStates] = useState(getInitialTabStates());
+  
+  // Use the transcript search hook
+  const { transcript, loading, error, search } = useTranscriptSearch();
 
   // Save active tab whenever it changes
   useEffect(() => {
@@ -53,19 +56,50 @@ export const SearchProvider = ({ children }) => {
 
   const handleSearch = (word) => {
     let newResults;
-    // Simulate API call with different results based on active tab
-    switch (activeTab) {
-      case 0:
-        newResults = { type: 'wordSearch', data: wordSearchResults };
-        break;
-      case 1:
-        newResults = { type: 'insights', data: insightsResults };
-        break;
-      case 2:
-        newResults = { type: 'autoSearch', data: autoSearchResults };
-        break;
-      default:
-        newResults = null;
+
+    if (word.trim() === '') {
+      newResults = null;
+    } else {
+      // For now, we only have real implementation for wordSearch
+      // Future implementation would handle other tabs differently
+      const searchResults = search(word);
+      
+      switch (activeTab) {
+        case 0: // Word Search
+          newResults = { type: 'wordSearch', data: searchResults };
+          break;
+        case 1: // Insights - currently returns placeholder data based on transcript
+          newResults = { 
+            type: 'insights', 
+            data: [
+              {
+                type: 'keyword',
+                word,
+                occurrences: searchResults.length,
+                timestamps: searchResults.map(r => r.timestamp),
+                context: `Found ${searchResults.length} mentions in video`
+              }
+            ] 
+          };
+          break;
+        case 2: // Auto Search - currently returns placeholder data based on transcript
+          newResults = { 
+            type: 'autoSearch', 
+            data: [
+              {
+                category: 'Search Results',
+                words: searchResults.map(r => ({
+                  word: r.word,
+                  timestamp: r.timestamp,
+                  confidence: 0.95
+                }))
+              }
+            ] 
+          };
+          break;
+        default:
+          newResults = null;
+      }
     }
 
     // Update the current tab's state
@@ -112,7 +146,10 @@ export const SearchProvider = ({ children }) => {
     },
     results: currentTabState.results,
     handleSearch,
-    clearResults
+    clearResults,
+    loading,
+    error,
+    transcript
   };
 
   return (
