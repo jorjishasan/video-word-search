@@ -1,0 +1,30 @@
+{
+  "manifest_version": 3,
+  "name": "Video Word Search",
+  "version": "1.0",
+  "description": "Search for words in YouTube videos",
+  "permissions": [
+    "activeTab",
+    "storage"
+  ],
+  "host_permissions": [
+    "https://*.youtube.com/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["https://*.youtube.com/*"],
+      "js": ["dist/script-injector.js"]
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["dist/assets/*"],
+      "matches": ["https://*.youtube.com/*"]
+    }
+  ],
+  "icons": {
+    "16": "src/assets/extensionLogo.svg",
+    "48": "src/assets/extensionLogo.svg",
+    "128": "src/assets/extensionLogo.svg"
+  }
+} 
