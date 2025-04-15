@@ -1,95 +1,6 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
 import { usePlayback } from '../../hooks/usePlayback';
-
-const ResultContainer = styled.div`
-  background-color: #1E2A2F;
-  color: #fff;
-`;
-
-const ResultItem = styled.div`
-  padding: 15px 20px;
-  border-bottom: 1px solid #2a363c;
-`;
-
-const InsightHeader = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 8px;
-`;
-
-const InsightType = styled.span`
-  color: #8b9398;
-  font-family: monospace;
-  font-size: 14px;
-  text-transform: uppercase;
-`;
-
-const Occurrences = styled.span`
-  color: #8b9398;
-  font-family: monospace;
-`;
-
-const Word = styled.div`
-  color: #fff;
-  font-family: monospace;
-  font-size: 18px;
-  margin-bottom: 8px;
-`;
-
-const Context = styled.div`
-  color: #8b9398;
-  font-family: monospace;
-  font-size: 14px;
-`;
-
-const Timestamps = styled.div`
-  color: #8b9398;
-  font-family: monospace;
-  font-size: 12px;
-  margin-top: 8px;
-`;
-
-const TimestampItem = styled.span`
-  cursor: pointer;
-  transition: color 0.2s ease;
-  padding: 2px 5px;
-  border-radius: 3px;
-  position: relative;
-  
-  &:hover {
-    color: #4CAF50;
-    background-color: #2a363c;
-  }
-  
-  &.played {
-    background-color: #4CAF50;
-    color: #fff;
-  }
-`;
-
-const ErrorMessage = styled.div`
-  background-color: #B71C1C;
-  color: white;
-  padding: 10px 15px;
-  margin: 5px 20px;
-  border-radius: 4px;
-  font-size: 12px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-const CloseButton = styled.button`
-  background: none;
-  border: none;
-  color: white;
-  cursor: pointer;
-  font-size: 16px;
-  margin-left: 10px;
-  padding: 0 5px;
-`;
+import { ERROR_NOTIFICATION, ERROR_CLOSE_BUTTON } from '../../utils/styles';
 
 const InsightsResult = ({ results }) => {
   const { playAtTimestamp, lastPlayedTimestamp, playbackError } = usePlayback();
@@ -108,37 +19,42 @@ const InsightsResult = ({ results }) => {
   };
   
   return (
-    <ResultContainer>
+    <div className="bg-bg-highlight text-content-primary">
       {(error || playbackError) && (
-        <ErrorMessage>
+        <div className={ERROR_NOTIFICATION}>
           {error || playbackError}
-          <CloseButton onClick={closeError}>×</CloseButton>
-        </ErrorMessage>
+          <button 
+            onClick={closeError}
+            className={ERROR_CLOSE_BUTTON}
+          >
+            ×
+          </button>
+        </div>
       )}
       {results.map((result, index) => (
-        <ResultItem key={index}>
-          <InsightHeader>
-            <InsightType>{result.type}</InsightType>
-            <Occurrences>{result.occurrences} occurrences</Occurrences>
-          </InsightHeader>
-          <Word>{result.word}</Word>
-          <Context>{result.context}</Context>
-          <Timestamps>
+        <div key={index} className="p-md border-b border-bg-highlight">
+          <div className="flex justify-between items-center mb-sm">
+            <span className="text-content-secondary text-sm uppercase tracking-wider">{result.type}</span>
+            <span className="text-content-secondary">{result.occurrences} occurrences</span>
+          </div>
+          <div className="text-content-primary text-lg mb-sm font-bold">{result.word}</div>
+          <div className="text-content-secondary text-sm">{result.context}</div>
+          <div className="text-content-secondary text-xs mt-sm">
             Found at: {result.timestamps.map((timestamp, i) => (
               <React.Fragment key={i}>
                 {i > 0 && ', '}
-                <TimestampItem 
+                <span 
                   onClick={() => handleTimestampClick(timestamp)}
-                  className={lastPlayedTimestamp === timestamp ? 'played' : ''}
+                  className={`cursor-pointer transition-colors duration-fast p-xs rounded-sm relative hover:text-brand hover:bg-bg-highlight ${lastPlayedTimestamp === timestamp ? 'bg-brand text-content-primary' : ''}`}
                 >
                   {timestamp}
-                </TimestampItem>
+                </span>
               </React.Fragment>
             ))}
-          </Timestamps>
-        </ResultItem>
+          </div>
+        </div>
       ))}
-    </ResultContainer>
+    </div>
   );
 };
 

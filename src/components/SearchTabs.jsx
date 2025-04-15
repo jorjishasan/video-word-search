@@ -1,111 +1,14 @@
 import React from 'react';
-import styled from 'styled-components';
 import wordSearch from '../assets/wordSearch.svg';
 import insights from '../assets/insights.svg';
 import autoSearch from '../assets/autoSearch.svg';
 import { useSearch } from '../context/SearchContext';
-import WordSearchResult from './results/WordSearchResult';
-import InsightsResult from './results/InsightsResult';
-import AutoSearchResult from './results/AutoSearchResult';
-
-const TabContainer = styled.div`
-  width: 100%;
-  background-color: #1a1a1a;
-  display: flex;
-  align-items: center;
-`;
-
-const Tab = styled.div.attrs(props => ({
-  style: {
-    backgroundColor: props.$isActive ? '#2a2a2a' : '#1a1a1a',
-    borderBottom: `2px solid ${props.$isActive ? '#4a4a4a' : 'transparent'}`
-  }
-}))`
-  flex: 1;
-  padding: 15px 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
-
-  &:hover {
-    background-color: #2a2a2a;
-  }
-
-  img {
-    width: 24px;
-    height: 24px;
-    filter: ${props => props.$isActive ? 'brightness(1)' : 'brightness(0.7)'};
-  }
-`;
-
-const SearchInput = styled.input`
-  width: 100%;
-  padding: 15px 20px;
-  background-color: #2a2a2a;
-  border: none;
-  color: #ffffff;
-  font-size: 16px;
-  outline: none;
-  box-sizing: border-box;
-  &::placeholder {
-    color: #666;
-  }
-`;
-
-const SearchContainer = styled.div`
-  width: 100%;
-  max-width: 800px;
-  margin: 0 auto;
-  background-color: #1a1a1a;
-  border-radius: 4px;
-  overflow: hidden;
-`;
-
-const ResultsContainer = styled.div`
-  max-height: 400px;
-  overflow-y: auto;
-  
-  &::-webkit-scrollbar {
-    width: 8px;
-  }
-
-  &::-webkit-scrollbar-track {
-    background: #1a1a1a;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: #2a363c;
-    border-radius: 4px;
-  }
-`;
-
-const LoadingContainer = styled.div`
-  padding: 20px;
-  text-align: center;
-  color: #999;
-  background-color: #1a1a1a;
-`;
-
-const ErrorContainer = styled.div`
-  padding: 20px;
-  text-align: center;
-  color: #ff6b6b;
-  background-color: #1a1a1a;
-`;
+import WordSearchTab from './WordSearch/WordSearchTab';
+import InsightsTab from './Insights/InsightsTab';
+import AutoSearchTab from './AutoSearch/AutoSearchTab';
 
 const SearchTabs = () => {
-  const { 
-    activeTab, 
-    setActiveTab, 
-    searchWord, 
-    setSearchWord, 
-    results, 
-    handleSearch,
-    loading,
-    error
-  } = useSearch();
+  const { activeTab, setActiveTab } = useSearch();
 
   const tabs = [
     { icon: wordSearch, alt: 'Word Search' },
@@ -113,64 +16,40 @@ const SearchTabs = () => {
     { icon: autoSearch, alt: 'Auto Search' }
   ];
 
-  const handleKeyDown = (e) => {
-    if (e.key === 'Enter' && searchWord.trim()) {
-      handleSearch(searchWord);
-    }
-  };
-
-  const renderResults = () => {
-    // Show loading state
-    if (loading && activeTab === 0) {
-      return <LoadingContainer>Loading transcript data...</LoadingContainer>;
-    }
-    
-    // Show error state
-    if (error && activeTab === 0) {
-      return <ErrorContainer>{error}</ErrorContainer>;
-    }
-    
-    // Show results if available
-    if (!results) return null;
-
-    switch (results.type) {
-      case 'wordSearch':
-        return results.data.length === 0 ? 
-          <LoadingContainer>No matches found for "{searchWord}"</LoadingContainer> :
-          <WordSearchResult results={results.data} />;
-      case 'insights':
-        return <InsightsResult results={results.data} />;
-      case 'autoSearch':
-        return <AutoSearchResult results={results.data} />;
+  const renderActiveTab = () => {
+    switch (activeTab) {
+      case 0:
+        return <WordSearchTab />;
+      case 1:
+        return <InsightsTab />;
+      case 2:
+        return <AutoSearchTab />;
       default:
-        return null;
+        return <WordSearchTab />;
     }
   };
 
   return (
-    <SearchContainer>
-      <TabContainer>
+    <div className="w-full max-w-[300px] mx-auto bg-bg-primary rounded overflow-hidden">
+      <div className="w-full bg-bg-primary flex items-center">
         {tabs.map((tab, index) => (
-          <Tab
+          <div
             key={index}
-            $isActive={activeTab === index}
+            className={`flex-1 py-sm flex justify-center items-center cursor-pointer transition-all duration-normal ease-in-out hover:bg-bg-secondary ${
+              activeTab === index ? 'bg-bg-secondary border-b-2 border-bg-interactive' : 'bg-bg-primary border-b-2 border-transparent'
+            }`}
             onClick={() => setActiveTab(index)}
           >
-            <img src={tab.icon} alt={tab.alt} />
-          </Tab>
+            <img 
+              src={tab.icon} 
+              alt={tab.alt} 
+              className={`w-10 h-10 ${activeTab === index ? 'brightness-100' : 'brightness-70'}`}
+            />
+          </div>
         ))}
-      </TabContainer>
-      <SearchInput
-        type="text"
-        placeholder="Enter search word..."
-        value={searchWord || ''}
-        onChange={(e) => setSearchWord(e.target.value)}
-        onKeyDown={handleKeyDown}
-      />
-      <ResultsContainer>
-        {renderResults()}
-      </ResultsContainer>
-    </SearchContainer>
+      </div>
+      {renderActiveTab()}
+    </div>
   );
 };
 
