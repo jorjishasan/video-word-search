@@ -4,7 +4,7 @@ import { useSearch } from '../../context/SearchContext';
 import { INPUT_STYLE, LOADING_MESSAGE, ERROR_MESSAGE } from '../../utils/styles';
 
 const AutoSearchTab = () => {
-  const { searchWord, setSearchWord, handleSearch, loading, error, transcript } = useSearch();
+  const { setSearchWord, handleSearch, loading, error, transcript } = useSearch();
   
   const [tags, setTags] = useState(() => {
     try {
@@ -18,6 +18,9 @@ const AutoSearchTab = () => {
 
   useEffect(() => {
     localStorage.setItem('autoSearchTags', JSON.stringify(tags));
+    
+    const foundCount = tags.filter(tag => tag.found).length;
+    localStorage.setItem('foundTagsCount', foundCount.toString());
   }, [tags]);
 
   useEffect(() => {
@@ -27,16 +30,23 @@ const AutoSearchTab = () => {
     }
     
     if (transcript && tags.length > 0) {
+      let foundCount = 0;
+      const updatedTags = [...tags];
+      
       tags.forEach((tag, index) => {
         const searchResults = handleSearch(tag.word, true) || [];
-        setTags(prev => {
-          const updated = [...prev];
-          if (updated[index]) {
-            updated[index] = { ...updated[index], found: searchResults.length > 0 };
-          }
-          return updated;
-        });
+        const isFound = searchResults.length > 0;
+        
+        if (isFound) foundCount++;
+        
+        updatedTags[index] = { 
+          ...updatedTags[index], 
+          found: isFound 
+        };
       });
+      
+      setTags(updatedTags);
+      localStorage.setItem('foundTagsCount', foundCount.toString());
     }
   }, [transcript]);
 

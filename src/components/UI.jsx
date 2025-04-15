@@ -1,18 +1,25 @@
 import React, { useState } from 'react';
 import SearchTabs from './SearchTabs';
 import extensionLogo from '../assets/extensionLogo.svg';
+import { useSearch } from '../context/SearchContext';
 
 const UI = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const { results } = useSearch();
 
   const togglePanel = () => {
     setIsOpen(!isOpen);
   };
 
+  // Check if any search results were found
+  const hasResults = results && results.data && results.data.length > 0;
+
   return (
     <div className="flex flex-col items-end font-mono">
       <button 
-        className="w-12 rounded-t-lg bg-accent border-none cursor-pointer flex items-center justify-center overflow-hidden"
+        className={`w-12 rounded-t-lg border-none cursor-pointer flex items-center justify-center overflow-hidden ${
+          hasResults ? 'bg-brand' : 'bg-accent'
+        }`}
         onClick={togglePanel}
       >
         <img 
