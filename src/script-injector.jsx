@@ -2,6 +2,7 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import UI from './components/UI';
 import { SearchProvider } from './context/SearchContext';
+import './index.css';
 
 /**
  * Injects UI container into YouTube video player and renders React app
