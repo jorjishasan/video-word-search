@@ -3,7 +3,7 @@
  */
 
 // Input styling
-export const INPUT_STYLE = "w-full p-md bg-bg-secondary border-none text-content-primary text-base outline-none box-border placeholder:text-content-tertiary";
+export const INPUT_STYLE = "w-full py-4 px-8 bg-bg-secondary border-none text-[16px] text-content-primary tracking-tighter outline-none box-border placeholder:text-content-tertiary";
 
 // Results container styling
 export const RESULTS_CONTAINER = "max-h-[400px] overflow-y-auto scrollbar scrollbar-track scrollbar-thumb scrollbar-rounded";

@@ -17,19 +17,20 @@ const UI = () => {
   return (
     <div className="flex flex-col items-end font-mono">
       <button 
-        className={`w-12 rounded-t-lg border-none cursor-pointer flex items-center justify-center overflow-hidden ${
+        className={`w-[48px] h-60% rounded-t-md border-none cursor-pointer flex items-center justify-center overflow-hidden ${
           hasResults ? 'bg-brand' : 'bg-accent'
         }`}
         onClick={togglePanel}
+        title="Open Video Word Search"
       >
         <img 
           src={extensionLogo} 
           alt="Toggle search" 
-          className="w-full h-[60%] object-contain -mt-xs"
+          className="w-12 h-12 object-contain -mt-[4px]"
         />
       </button>
       <div 
-        className={`w-[300px] transition-all duration-normal ease-in-out ${
+        className={`w-[384px] transition-all duration-normal ease-in-out ${
           isOpen ? 'opacity-100 translate-y-0 block' : 'opacity-0 -translate-y-sm hidden'
         }`}
       >
