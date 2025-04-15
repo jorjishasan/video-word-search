@@ -14,9 +14,9 @@ const SearchTabs = () => {
   const foundTagsCount = parseInt(localStorage.getItem('foundTagsCount') || '0');
 
   const tabs = [
-    { icon: wordSearch, alt: 'Word Search' },
-    { icon: insights, alt: 'Insights' },
-    { icon: autoSearch, alt: 'Auto Search' }
+    { icon: wordSearch, alt: 'Word Search', tooltip: 'Search for specific words in the video' },
+    { icon: autoSearch, alt: 'Auto Search', tooltip: 'Set words to automatically search in any video' },
+    { icon: insights, alt: 'Insights', tooltip: 'Get insights about the video content' },
   ];
 
   const renderActiveTab = () => {
@@ -24,33 +24,34 @@ const SearchTabs = () => {
       case 0:
         return <WordSearchTab />;
       case 1:
-        return <InsightsTab />;
-      case 2:
         return <AutoSearchTab />;
+      case 2:
+        return <InsightsTab />;
       default:
         return <WordSearchTab />;
     }
   };
 
   return (
-    <div className="w-full max-w-[300px] mx-auto bg-bg-primary rounded overflow-hidden">
+    <div className="w-full mx-auto bg-bg-primary rounded overflow-hidden">
       <div className="w-full bg-bg-primary flex items-center">
         {tabs.map((tab, index) => (
           <div
             key={index}
-            className={`flex-1 py-sm flex justify-center items-center cursor-pointer transition-all duration-normal ease-in-out hover:bg-bg-secondary ${
-              activeTab === index ? 'bg-bg-secondary border-b-2 border-bg-interactive' : 'bg-bg-primary border-b-2 border-transparent'
+            className={`flex-1 py-3 flex justify-center items-center cursor-pointer transition-all duration-normal ease-in-out hover:bg-bg-secondary ${
+              activeTab === index ? 'bg-bg-secondary border-b-2 border-accent' : 'bg-bg-primary border-b-2 border-transparent'
             }`}
             onClick={() => setActiveTab(index)}
+            title={tab.tooltip}
           >
             <div className="relative">
               <img 
                 src={tab.icon} 
                 alt={tab.alt} 
-                className={`w-10 h-10 ${activeTab === index ? 'brightness-100' : 'brightness-70'}`}
+                className={`w-12 h-12 ${activeTab === index ? 'brightness-110' : 'brightness-50'}`}
               />
-              {index === 2 && foundTagsCount > 0 && (
-                <div className="absolute -top-1 -right-1 bg-brand text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+              {index === 1 && foundTagsCount > 0 && (
+                <div className="absolute -top-1 -right-1 bg-brand text-white text-base rounded-full w-6 h-6 flex items-center justify-center">
                   {foundTagsCount}
                 </div>
               )}
@@ -58,7 +59,9 @@ const SearchTabs = () => {
           </div>
         ))}
       </div>
-      {renderActiveTab()}
+      <div>
+        {renderActiveTab()}
+      </div>
     </div>
   );
 };

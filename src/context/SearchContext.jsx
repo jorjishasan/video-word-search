@@ -6,6 +6,13 @@ const SearchContext = createContext();
 
 const STORAGE_KEY = 'tabStates';
 
+// This map defines which component is at which tab index
+const TAB_TYPES = {
+  0: 'wordSearch',  // Position 0: Word Search
+  1: 'autoSearch',  // Position 1: Auto Search (moved from position 2)
+  2: 'insights',    // Position 2: Insights (moved from position 1)
+};
+
 const getInitialTabStates = () => {
   try {
     const stored = localStorage.getItem(STORAGE_KEY);
@@ -76,11 +83,17 @@ export const SearchProvider = ({ children }) => {
     } else {
       searchResults = overrideResults || search(word);
       
-      switch (activeTab) {
-        case 0:
+      // Use the tab type mapping to ensure consistent data structures
+      const tabType = TAB_TYPES[activeTab];
+      
+      switch (tabType) {
+        case 'wordSearch':
           newResults = { data: searchResults };
           break;
-        case 1:
+        case 'autoSearch':
+          newResults = { data: searchResults };
+          break;
+        case 'insights':
           newResults = { 
             data: [
               {
@@ -92,9 +105,6 @@ export const SearchProvider = ({ children }) => {
               }
             ] 
           };
-          break;
-        case 2:
-          newResults = { data: searchResults };
           break;
         default:
           newResults = null;

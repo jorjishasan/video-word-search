@@ -97,20 +97,20 @@ const AutoSearchTab = () => {
   if (error) return <div className={ERROR_MESSAGE}>{error}</div>;
 
   return (
-    <>
+    <div>
       <input
         type="text"
         placeholder="Enter words separated by commas..."
         value={pendingTag}
         onChange={handleInputChange}
         onKeyDown={handleKeyDown}
-        className={INPUT_STYLE}
+        className={`${INPUT_STYLE} w-full mb-3`}
       />
       <TagsContainer 
         tags={tags} 
         onTagRemove={(index) => setTags(prev => prev.filter((_, i) => i !== index))}
       />
-    </>
+    </div>
   );
 };
 
