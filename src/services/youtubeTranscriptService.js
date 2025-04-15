@@ -83,6 +83,7 @@ export const searchTranscript = (searchWord, transcript, videoId) => {
   
   const results = [];
   const searchWordLower = searchWord.toLowerCase();
+  const timestampMap = new Map(); // To collect all timestamps for the same word
   
   // For each timestamp in the transcript
   Object.entries(transcript).forEach(([timestamp, text]) => {
@@ -90,15 +91,40 @@ export const searchTranscript = (searchWord, transcript, videoId) => {
     
     // Check if the search word is in the text
     if (textLower.includes(searchWordLower)) {
-      // Create context (the text with the search word)
-      results.push({
-        word: searchWord,
-        context: text,
-        timestamp,
-        videoId
-      });
+      // Add to our timestamp map or create a new entry
+      if (timestampMap.has(searchWord)) {
+        timestampMap.get(searchWord).timestamps.push(timestamp);
+      } else {
+        timestampMap.set(searchWord, {
+          word: searchWord,
+          context: text,
+          timestamps: [timestamp],
+          videoId
+        });
+      }
     }
   });
+  
+  // Convert map to array of results
+  for (const [word, data] of timestampMap.entries()) {
+    // If we have just one timestamp, keep the old format
+    if (data.timestamps.length === 1) {
+      results.push({
+        word: data.word,
+        context: data.context,
+        timestamp: data.timestamps[0],
+        videoId: data.videoId
+      });
+    } else {
+      // For multiple timestamps, use array format
+      results.push({
+        word: data.word,
+        context: data.context,
+        timestamp: data.timestamps, // Array of timestamps
+        videoId: data.videoId
+      });
+    }
+  }
   
   return results;
 };

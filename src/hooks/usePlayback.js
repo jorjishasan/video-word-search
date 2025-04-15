@@ -6,7 +6,6 @@ import { seekToTimestamp } from '../services/PlaybackController';
  * @returns {Object} - Playback control functions and state
  */
 export const usePlayback = () => {
-  const [lastPlayedTimestamp, setLastPlayedTimestamp] = useState(null);
   const [playbackError, setPlaybackError] = useState(null);
 
   /**
@@ -21,14 +20,13 @@ export const usePlayback = () => {
     try {
       const result = seekToTimestamp(timestamp);
       
-      if (result) {
-        setLastPlayedTimestamp(timestamp);
-        return true;
-      } else {
+      if (!result) {
         console.warn(`Failed to seek to timestamp: ${timestamp}`);
         setPlaybackError(`Could not play at ${timestamp}. Make sure you're on YouTube.`);
         return false;
       }
+      
+      return true;
     } catch (error) {
       console.error('Error in playAtTimestamp:', error);
       setPlaybackError(`Error: ${error.message}`);
@@ -53,7 +51,6 @@ export const usePlayback = () => {
   return {
     playAtTimestamp,
     isYouTubePlayerAvailable,
-    lastPlayedTimestamp,
     playbackError
   };
 }; 
