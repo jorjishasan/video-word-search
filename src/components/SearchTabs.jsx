@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import wordSearch from '../assets/wordSearch.svg';
 import insights from '../assets/insights.svg';
 import autoSearch from '../assets/autoSearch.svg';
@@ -10,8 +10,26 @@ import AutoSearchTab from './AutoSearch/AutoSearchTab';
 const SearchTabs = () => {
   const { activeTab, setActiveTab } = useSearch();
   
-  // Get the found tags count (will be set by AutoSearchTab)
-  const foundTagsCount = parseInt(localStorage.getItem('foundTagsCount') || '0');
+  // Create state to track found tags count
+  const [foundTagsCount, setFoundTagsCount] = useState(() => {
+    return parseInt(localStorage.getItem('foundTagsCount') || '0');
+  });
+
+  // Listen for changes to foundTagsCount in localStorage
+  useEffect(() => {
+    const handleStorageChange = () => {
+      const newCount = parseInt(localStorage.getItem('foundTagsCount') || '0');
+      setFoundTagsCount(newCount);
+    };
+    
+    // Listen for custom storage events
+    window.addEventListener('storage', handleStorageChange);
+    
+    // Cleanup
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, []);
 
   const tabs = [
     { icon: wordSearch, alt: 'Word Search', tooltip: 'Search for specific words in the video' },

@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import TagsContainer from './TagsContainer';
 import { useSearch } from '../../context/SearchContext';
 import { INPUT_STYLE, LOADING_MESSAGE, ERROR_MESSAGE } from '../../utils/styles';
 
 const AutoSearchTab = () => {
-  const { setSearchWord, handleSearch, loading, error, transcript } = useSearch();
+  const { setSearchWord, handleSearch, loading, error, transcript, activeTab } = useSearch();
+  const inputRef = useRef(null);
   
   const [tags, setTags] = useState(() => {
     try {
@@ -16,39 +17,41 @@ const AutoSearchTab = () => {
   const [pendingTag, setPendingTag] = useState('');
   const [lastTranscript, setLastTranscript] = useState(null);
 
+  // Auto-focus input when tab is active
+  useEffect(() => {
+    if (activeTab === 1 && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [activeTab]);
+
+  // Update localStorage whenever tags change
   useEffect(() => {
     localStorage.setItem('autoSearchTags', JSON.stringify(tags));
-    
-    const foundCount = tags.filter(tag => tag.found).length;
-    localStorage.setItem('foundTagsCount', foundCount.toString());
   }, [tags]);
 
+  // Handle transcript changes
   useEffect(() => {
-    if (transcript !== lastTranscript) {
-      setPendingTag('');
-      setLastTranscript(transcript);
-    }
+    // Skip if transcript hasn't changed
+    if (transcript === lastTranscript) return;
     
-    if (transcript && tags.length > 0) {
-      let foundCount = 0;
-      const updatedTags = [...tags];
-      
-      tags.forEach((tag, index) => {
-        const searchResults = handleSearch(tag.word, true) || [];
-        const isFound = searchResults.length > 0;
-        
-        if (isFound) foundCount++;
-        
-        updatedTags[index] = { 
-          ...updatedTags[index], 
-          found: isFound 
-        };
-      });
-      
-      setTags(updatedTags);
-      localStorage.setItem('foundTagsCount', foundCount.toString());
-    }
-  }, [transcript]);
+    // Reset pending tag when transcript changes
+    setPendingTag('');
+    setLastTranscript(transcript);
+    
+    // Don't process empty transcript or no tags
+    if (!transcript || tags.length === 0) return;
+    
+    // Update all tags with search results
+    const updatedTags = tags.map(tag => {
+      const searchResults = handleSearch(tag.word, true) || [];
+      return { 
+        ...tag, 
+        found: searchResults.length > 0 
+      };
+    });
+    
+    setTags(updatedTags);
+  }, [transcript, lastTranscript, tags, handleSearch]);
 
   const addTag = (word) => {
     const trimmedWord = word.trim();
@@ -57,18 +60,55 @@ const AutoSearchTab = () => {
     const isDuplicate = tags.some(tag => tag.word.toLowerCase() === trimmedWord.toLowerCase());
     if (isDuplicate) return;
     
-    setTags(prev => [...prev, { word: trimmedWord, found: false }]);
+    const newTag = { 
+      word: trimmedWord, 
+      found: false 
+    };
     
+    let tagIsFound = false;
     if (transcript) {
       const searchResults = handleSearch(trimmedWord, true) || [];
-      setTags(prev => {
-        const index = prev.length - 1;
-        const updated = [...prev];
-        updated[index] = { ...updated[index], found: searchResults.length > 0 };
-        return updated;
-      });
+      newTag.found = searchResults.length > 0;
+      tagIsFound = newTag.found;
+    }
+    
+    // Create new tags array
+    const newTags = [...tags, newTag];
+    
+    // Update tags state
+    setTags(newTags);
+    
+    // If the new tag is found, update count immediately instead of waiting for effect
+    if (tagIsFound) {
+      const newFoundCount = newTags.filter(tag => tag.found).length;
+      localStorage.setItem('foundTagsCount', newFoundCount.toString());
+      window.dispatchEvent(new Event('storage'));
     }
   };
+
+  const handleTagRemove = useCallback((index) => {
+    // Check if the tag being removed was found (to update count)
+    const removedTag = tags[index];
+    const wasFound = removedTag && removedTag.found;
+    
+    // Remove the tag - use optimized approach
+    const newTags = [...tags];
+    newTags.splice(index, 1);
+    
+    // Update tags state
+    setTags(newTags);
+    
+    // Always update localStorage immediately to ensure UI stays in sync
+    localStorage.setItem('autoSearchTags', JSON.stringify(newTags));
+    
+    // Update the count immediately if needed
+    const newFoundCount = wasFound 
+      ? newTags.filter(tag => tag.found).length 
+      : parseInt(localStorage.getItem('foundTagsCount') || '0');
+    
+    localStorage.setItem('foundTagsCount', newFoundCount.toString());
+    window.dispatchEvent(new Event('storage'));
+  }, [tags]);
 
   const handleKeyDown = (e) => {
     if ((e.key === 'Enter' || e.key === ',') && pendingTag) {
@@ -99,6 +139,7 @@ const AutoSearchTab = () => {
   return (
     <div>
       <input
+        ref={inputRef}
         type="text"
         placeholder="Enter words separated by commas..."
         value={pendingTag}
@@ -108,7 +149,7 @@ const AutoSearchTab = () => {
       />
       <TagsContainer 
         tags={tags} 
-        onTagRemove={(index) => setTags(prev => prev.filter((_, i) => i !== index))}
+        onTagRemove={handleTagRemove}
       />
     </div>
   );
