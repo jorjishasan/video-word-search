@@ -7,6 +7,9 @@ import WordSearchTab from './WordSearch/WordSearchTab';
 import InsightsTab from './Insights/InsightsTab';
 import AutoSearchTab from './AutoSearch/AutoSearchTab';
 
+// Import the same event name as used in AutoSearchTab
+const TAGS_COUNT_EVENT = 'foundTagsCountChanged';
+
 const SearchTabs = () => {
   const { activeTab, setActiveTab } = useSearch();
   
@@ -22,12 +25,14 @@ const SearchTabs = () => {
       setFoundTagsCount(newCount);
     };
     
-    // Listen for custom storage events
+    // Listen for both storage events (cross-tab) and our custom event (same-tab)
     window.addEventListener('storage', handleStorageChange);
+    window.addEventListener(TAGS_COUNT_EVENT, handleStorageChange);
     
     // Cleanup
     return () => {
       window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener(TAGS_COUNT_EVENT, handleStorageChange);
     };
   }, []);
 

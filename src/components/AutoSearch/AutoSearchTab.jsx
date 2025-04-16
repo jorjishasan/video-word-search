@@ -3,6 +3,9 @@ import TagsContainer from './TagsContainer';
 import { useSearch } from '../../context/SearchContext';
 import { INPUT_STYLE, LOADING_MESSAGE, ERROR_MESSAGE } from '../../utils/styles';
 
+// Custom event for foundTagsCount updates
+const TAGS_COUNT_EVENT = 'foundTagsCountChanged';
+
 const AutoSearchTab = () => {
   const { setSearchWord, handleSearch, loading, error, transcript, activeTab } = useSearch();
   const inputRef = useRef(null);
@@ -28,6 +31,16 @@ const AutoSearchTab = () => {
   useEffect(() => {
     localStorage.setItem('autoSearchTags', JSON.stringify(tags));
   }, [tags]);
+
+  // Create a function to notify components about count changes
+  const notifyCountChanged = useCallback((count) => {
+    // Update localStorage
+    localStorage.setItem('foundTagsCount', count.toString());
+    
+    // Dispatch both a storage event (for cross-tab) and our custom event (for same-tab)
+    window.dispatchEvent(new Event('storage'));
+    window.dispatchEvent(new CustomEvent(TAGS_COUNT_EVENT, { detail: { count } }));
+  }, []);
 
   // Handle transcript changes
   useEffect(() => {
@@ -55,10 +68,9 @@ const AutoSearchTab = () => {
     
     // Update foundTagsCount directly when transcript changes
     const foundCount = updatedTags.filter(tag => tag.found).length;
-    localStorage.setItem('foundTagsCount', foundCount.toString());
-    window.dispatchEvent(new Event('storage'));
+    notifyCountChanged(foundCount);
     
-  }, [transcript, lastTranscript, tags, handleSearch]);
+  }, [transcript, lastTranscript, tags, handleSearch, notifyCountChanged]);
 
   const addTag = (word) => {
     const trimmedWord = word.trim();
@@ -88,15 +100,13 @@ const AutoSearchTab = () => {
     // If the new tag is found, update count immediately instead of waiting for effect
     if (tagIsFound) {
       const newFoundCount = newTags.filter(tag => tag.found).length;
-      localStorage.setItem('foundTagsCount', newFoundCount.toString());
-      window.dispatchEvent(new Event('storage'));
+      notifyCountChanged(newFoundCount);
     }
   };
 
   const handleTagRemove = useCallback((index) => {
     // Check if the tag being removed was found (to update count)
     const removedTag = tags[index];
-    const wasFound = removedTag && removedTag.found;
     
     // Remove the tag - use optimized approach
     const newTags = [...tags];
@@ -111,10 +121,9 @@ const AutoSearchTab = () => {
     // Always update the count and notify, regardless of whether this specific tag was found
     // This ensures the UI updates properly when removing the last tag
     const newFoundCount = newTags.filter(tag => tag.found).length;
-    localStorage.setItem('foundTagsCount', newFoundCount.toString());
-    window.dispatchEvent(new Event('storage'));
+    notifyCountChanged(newFoundCount);
     
-  }, [tags]);
+  }, [tags, notifyCountChanged]);
 
   const handleKeyDown = (e) => {
     if ((e.key === 'Enter' || e.key === ',') && pendingTag) {

@@ -3,6 +3,9 @@ import SearchTabs from './SearchTabs';
 import extensionLogo from '../assets/extensionLogo.svg';
 import { useSearch } from '../context/SearchContext';
 
+// Import the same event name as used in AutoSearchTab
+const TAGS_COUNT_EVENT = 'foundTagsCountChanged';
+
 const UI = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { results } = useSearch();
@@ -26,14 +29,16 @@ const UI = () => {
       setAnyTagFound(hasCurrentResults || hasFoundTags);
     };
 
-    // Listen for storage events to update UI when foundTagsCount changes
+    // Listen for both storage events (cross-tab) and our custom event (same-tab)
     window.addEventListener('storage', checkFoundTags);
+    window.addEventListener(TAGS_COUNT_EVENT, checkFoundTags);
     
     // Initial check
     checkFoundTags();
     
     return () => {
       window.removeEventListener('storage', checkFoundTags);
+      window.removeEventListener(TAGS_COUNT_EVENT, checkFoundTags);
     };
   }, [results]);
 
