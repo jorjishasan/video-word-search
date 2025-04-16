@@ -145,7 +145,7 @@ const AutoSearchTab = () => {
         value={pendingTag}
         onChange={handleInputChange}
         onKeyDown={handleKeyDown}
-        className={`${INPUT_STYLE} w-full mb-3`}
+        className={`${INPUT_STYLE} w-full`}
       />
       <TagsContainer 
         tags={tags} 

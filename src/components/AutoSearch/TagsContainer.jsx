@@ -7,7 +7,7 @@ const TagsContainer = ({ tags, onTagRemove }) => {
   }
   
   return (
-    <div className="flex flex-wrap gap-sm p-md bg-bg-secondary min-h-[40px]">
+    <div className="flex flex-wrap p-[8px] gap-[4px] mt-3 bg-bg-secondary min-h-[48px]">
       {tags.map((tag, index) => (
         <Tag 
           key={index}

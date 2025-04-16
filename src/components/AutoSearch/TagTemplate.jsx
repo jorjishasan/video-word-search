@@ -8,16 +8,16 @@ const Tag = ({ tag, onTagRemove }) => {
   return (
     <div className="relative">
       <div 
-        className={`flex items-center justify-between px-4 py-2 
+        className={`flex items-center justify-between px-4 py-2
         ${bgColor} text-white
         rounded-full border-none shadow-sm
         relative w-auto overflow-visible
         transition-colors`}
       >
-        <div className="flex items-center text-base font-medium">{tag.word}</div>
+        <div className="flex items-center text-[14px] font-medium">{tag.word.toUpperCase()}</div>
         <button 
           onClick={(e) => { onTagRemove(); }}
-          className={`w-5 h-5 flex items-center justify-center ml-2 rounded-full bg-white ${btnTextColor} hover:bg-gray-200 transition-colors cursor-pointer`}
+          className={`w-6 h-6 flex items-center justify-center ml-3 rounded-full bg-white ${btnTextColor} hover:bg-gray-200 transition-colors cursor-pointer`}
           aria-label="Remove tag"
           title="Remove tag"
         >
