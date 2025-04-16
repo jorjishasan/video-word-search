@@ -108,13 +108,12 @@ const AutoSearchTab = () => {
     // Always update localStorage immediately to ensure UI stays in sync
     localStorage.setItem('autoSearchTags', JSON.stringify(newTags));
     
-    // Update the count immediately if needed
-    const newFoundCount = wasFound 
-      ? newTags.filter(tag => tag.found).length 
-      : parseInt(localStorage.getItem('foundTagsCount') || '0');
-    
+    // Always update the count and notify, regardless of whether this specific tag was found
+    // This ensures the UI updates properly when removing the last tag
+    const newFoundCount = newTags.filter(tag => tag.found).length;
     localStorage.setItem('foundTagsCount', newFoundCount.toString());
     window.dispatchEvent(new Event('storage'));
+    
   }, [tags]);
 
   const handleKeyDown = (e) => {
