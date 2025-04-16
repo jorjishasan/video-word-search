@@ -50,7 +50,14 @@ const AutoSearchTab = () => {
       };
     });
     
+    // Update tags state
     setTags(updatedTags);
+    
+    // Update foundTagsCount directly when transcript changes
+    const foundCount = updatedTags.filter(tag => tag.found).length;
+    localStorage.setItem('foundTagsCount', foundCount.toString());
+    window.dispatchEvent(new Event('storage'));
+    
   }, [transcript, lastTranscript, tags, handleSearch]);
 
   const addTag = (word) => {
