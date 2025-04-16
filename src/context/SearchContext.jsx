@@ -50,6 +50,24 @@ export const SearchProvider = ({ children }) => {
 
   useEffect(() => {
     localStorage.setItem('lastActiveTab', activeTab.toString());
+    
+    // When switching to the autoSearch tab (tab 1), ensure the foundTagsCount is properly updated
+    if (activeTab === 1) {
+      // Force an update of the foundTagsCount
+      try {
+        const tags = JSON.parse(localStorage.getItem('autoSearchTags')) || [];
+        const foundCount = tags.filter(tag => tag.found).length;
+        localStorage.setItem('foundTagsCount', foundCount.toString());
+        
+        // Dispatch custom event to notify UI
+        window.dispatchEvent(new Event('storage'));
+        window.dispatchEvent(new CustomEvent('foundTagsCountChanged', { 
+          detail: { count: foundCount } 
+        }));
+      } catch (error) {
+        console.error('Error updating foundTagsCount on tab switch:', error);
+      }
+    }
   }, [activeTab]);
 
   useEffect(() => {
