@@ -1,17 +1,26 @@
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useCallback } from 'react';
+import { useSearchInput } from '../../../hooks/useSearchInput';
 
+/**
+ * Custom hook for managing tag input in the AutoSearchTab
+ * @param {number} activeTab - Current active tab
+ * @param {function} addTag - Function to add a tag
+ * @param {function} setSearchWord - Function to update search word in context
+ * @returns {Object} - Input props and handlers
+ */
 export const useTagInput = (activeTab, addTag, setSearchWord) => {
   const [pendingTag, setPendingTag] = useState('');
-  const inputRef = useRef(null);
+  
+  // Use the shared search input hook, but override some behaviors
+  const { inputRef } = useSearchInput(
+    pendingTag,
+    setPendingTag,
+    () => {}, // We handle search differently for tags
+    activeTab,
+    1 // tabIndex for AutoSearchTab
+  );
 
-  // Auto-focus input when tab is active
-  useEffect(() => {
-    if (activeTab === 1 && inputRef.current) {
-      inputRef.current.focus();
-    }
-  }, [activeTab]);
-
-  // Handle key events for adding tags
+  // Handle key events specifically for adding tags
   const handleKeyDown = useCallback((e) => {
     if ((e.key === 'Enter' || e.key === ',') && pendingTag) {
       e.preventDefault();
