@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
-import { fetchYoutubeTranscript, searchTranscript, getCurrentVideoId } from '../services/youtubeTranscriptService';
+import { fetchYoutubeTranscript, searchTranscript, getCurrentVideoId, hasTranscript, TRANSCRIPT_LOADED_EVENT, VIDEO_CHANGED_EVENT } from '../services/youtubeTranscriptService';
+import { safeGetItem } from '../utils/storageUtils';
 
 /**
  * Hook for fetching and searching YouTube transcript data
@@ -24,13 +25,41 @@ export const useTranscriptSearch = () => {
           return;
         }
         
-        setVideoId(currentVideoId);
-        const data = await fetchYoutubeTranscript(currentVideoId);
+        // Check if we need to fetch a new transcript
+        const lastVideoId = localStorage.getItem('lastVideoId');
         
-        if (!data) {
-          setError('Failed to fetch transcript data');
+        // Only fetch in two conditions:
+        // 1. First time using (lastVideoId is null)
+        // 2. Current video is different from last video
+        if (lastVideoId === null || currentVideoId !== lastVideoId) {
+          setVideoId(currentVideoId);
+          const data = await fetchYoutubeTranscript(currentVideoId);
+          
+          if (!data) {
+            setError('Failed to fetch transcript data');
+          } else {
+            setTranscript(data);
+          }
         } else {
-          setTranscript(data);
+          // Video hasn't changed, check if we have a cached transcript
+          setVideoId(currentVideoId);
+          const cachedTranscript = safeGetItem('ytTranscript', null);
+          if (cachedTranscript) {
+            setTranscript(cachedTranscript);
+          } else {
+            // If no cached transcript but hasTranscript is true, fetch it
+            if (hasTranscript()) {
+              const data = await fetchYoutubeTranscript(currentVideoId);
+              
+              if (!data) {
+                setError('Failed to fetch transcript data');
+              } else {
+                setTranscript(data);
+              }
+            } else {
+              setError('No transcript available for this video');
+            }
+          }
         }
       } catch (err) {
         setError(`Error fetching transcript: ${err.message}`);
@@ -42,29 +71,46 @@ export const useTranscriptSearch = () => {
     // Fetch transcript on component mount
     fetchTranscript();
     
-    // Set up event listener for URL changes
-    const handleUrlChange = () => {
-      const newVideoId = getCurrentVideoId();
-      if (newVideoId !== videoId) {
-        fetchTranscript();
+    // Listen for transcript events
+    const handleTranscriptLoaded = (event) => {
+      const { videoId: loadedVideoId, transcriptSize } = event.detail;
+      
+      if (transcriptSize > 0) {
+        setVideoId(loadedVideoId);
+        const cachedTranscript = safeGetItem('ytTranscript', null);
+        if (cachedTranscript) {
+          setTranscript(cachedTranscript);
+          setError(null);
+        }
       }
     };
     
-    window.addEventListener('popstate', handleUrlChange);
+    const handleVideoChanged = () => {
+      // Reset transcript when video changes
+      setTranscript(null);
+      setError(null);
+    };
+    
+    // Set up event listeners for transcript and video changes
+    window.addEventListener(TRANSCRIPT_LOADED_EVENT, handleTranscriptLoaded);
+    window.addEventListener(VIDEO_CHANGED_EVENT, handleVideoChanged);
+    window.addEventListener('popstate', handleVideoChanged);
     
     // Clean up
     return () => {
-      window.removeEventListener('popstate', handleUrlChange);
+      window.removeEventListener(TRANSCRIPT_LOADED_EVENT, handleTranscriptLoaded);
+      window.removeEventListener(VIDEO_CHANGED_EVENT, handleVideoChanged);
+      window.removeEventListener('popstate', handleVideoChanged);
     };
-  }, [videoId]);
+  }, []);
   
   // Search function using the transcript data
-  const search = useCallback((searchWord) => {
+  const search = useCallback((searchWord, isExactWordMatch = false) => {
     if (!searchWord || !transcript || !videoId) {
       return [];
     }
     
-    return searchTranscript(searchWord, transcript, videoId);
+    return searchTranscript(searchWord, transcript, videoId, isExactWordMatch);
   }, [transcript, videoId]);
   
   return {
