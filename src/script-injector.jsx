@@ -31,7 +31,7 @@ const injectUI = () => {
   uiContainer.id = 'video-word-search-ui';
   uiContainer.style.position = 'absolute';
   uiContainer.style.top = '-26px';
-  uiContainer.style.right = '0';
+  uiContainer.style.left = '48px';
   uiContainer.style.zIndex = '9999999';
   uiContainer.style.pointerEvents = 'auto';
   
@@ -51,7 +51,6 @@ const injectUI = () => {
     );
     return true;
   } catch (error) {
-    console.error('Failed to render UI:', error);
     return false;
   }
 };
