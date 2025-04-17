@@ -212,8 +212,27 @@ const dispatchTranscriptEvent = (eventName, videoId, transcript) => {
 export const searchTranscript = (searchWord, transcript, videoId, isExactWordMatch = false) => {
   if (!searchWord || !transcript) return [];
   
+  console.log("Search request:", { 
+    searchWord, 
+    isExactWordMatch,
+    hasSpaces: searchWord.includes(' ')
+  });
+  
   const results = [];
   const searchWordLower = searchWord.toLowerCase().trim();
+  
+  console.log("Normalized search term:", searchWordLower);
+  
+  // Skip empty searches
+  if (searchWordLower === '') return [];
+  
+  // Log transcript size for debugging
+  const transcriptSize = Object.keys(transcript).length;
+  console.log(`Searching through ${transcriptSize} transcript entries`);
+  
+  // Handle the case of partial word search with spaces (like "we d")
+  // by converting spaces to optional characters that can match any character
+  const hasSpaces = searchWordLower.includes(' ');
   
   // For each timestamp in the transcript
   Object.entries(transcript).forEach(([timestamp, text]) => {
@@ -236,6 +255,7 @@ export const searchTranscript = (searchWord, transcript, videoId, isExactWordMat
           });
         }
       } catch (error) {
+        console.error("Regex error:", error);
         // If regex fails, fall back to simple includes check
         if (textLower.includes(searchWordLower)) {
           results.push({
@@ -247,8 +267,55 @@ export const searchTranscript = (searchWord, transcript, videoId, isExactWordMat
         }
       }
     } else {
-      // For WordSearch: Substring match, phrase match, and word match
-      if (textLower.includes(searchWordLower)) {
+      // For WordSearch: Handle partial word matching that works with spaces
+      let found = false;
+      
+      if (hasSpaces) {
+        // Handle case with spaces by treating each word as a sequential pattern
+        try {
+          // Split the search term into words
+          const searchWords = searchWordLower.split(' ').filter(w => w.length > 0);
+          
+          // If we're searching for "we d", we want to match "we don't", "we do", etc.
+          // First, check if all words appear in the text
+          if (searchWords.every(word => textLower.includes(word))) {
+            // Now check if they appear in sequence with potential characters between them
+            let remainingText = textLower;
+            let allWordsFoundInSequence = true;
+            
+            for (const word of searchWords) {
+              const wordIndex = remainingText.indexOf(word);
+              if (wordIndex === -1) {
+                allWordsFoundInSequence = false;
+                break;
+              }
+              // Move to the text after this word for next iteration
+              remainingText = remainingText.substring(wordIndex + word.length);
+            }
+            
+            // Alternately, try a regex approach for matching with characters between words
+            const wordsPattern = searchWords.map(w => w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('\\S*\\s+\\S*');
+            const searchRegex = new RegExp(wordsPattern, 'i');
+            
+            // If either approach finds a match, count it as found
+            found = allWordsFoundInSequence || searchRegex.test(textLower);
+          }
+        } catch (error) {
+          console.error("Multi-word search error:", error);
+          // Fall back to simple includes if the regex approach fails
+          found = textLower.includes(searchWordLower);
+        }
+      } else {
+        // Simple substring match for single words
+        found = textLower.includes(searchWordLower);
+      }
+      
+      // Log first few matches for debugging
+      if (found && results.length < 3) {
+        console.log(`Match found at ${timestamp}: "${text.substring(0, 30)}..."`);
+      }
+      
+      if (found) {
         results.push({
           word: searchWord,
           context: text,
@@ -259,16 +326,9 @@ export const searchTranscript = (searchWord, transcript, videoId, isExactWordMat
     }
   });
   
-  // Sort results by timestamp
-  return results.sort((a, b) => {
-    // Convert timestamp (HH:MM:SS) to seconds for comparison
-    const getSeconds = (timestamp) => {
-      const [hours, minutes, seconds] = timestamp.split(':').map(Number);
-      return hours * 3600 + minutes * 60 + seconds;
-    };
-    
-    return getSeconds(a.timestamp) - getSeconds(b.timestamp);
-  });
+  console.log(`Search complete. Found ${results.length} results for "${searchWordLower}"`);
+  
+  return results;
 };
 
 /**
