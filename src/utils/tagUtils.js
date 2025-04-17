@@ -10,27 +10,34 @@ export const getFoundTagsCount = () => {
 };
 
 /**
- * Check if any tags are found in the current transcript or if there are search results
- * @param {Object} results - Search results object
- * @returns {boolean} True if any tags are found or if there are search results
+ * Check if any tags are found in the current transcript
+ * Only used for AutoSearch
+ * @param {Array} tags - AutoSearch tags array
+ * @returns {boolean} True if any tags are found
  */
-export const checkAnyTagsFound = (results) => {
-  const foundTagsCount = getFoundTagsCount();
-  const hasCurrentResults = results && results.data && results.data.length > 0;
-  return foundTagsCount > 0 || hasCurrentResults;
+export const checkAnyTagsFound = (tags = []) => {
+  if (!tags || !tags.length) {
+    return getFoundTagsCount() > 0;
+  }
+  return tags.some(tag => tag.found);
 };
 
 /**
- * Force a re-render of components listening for tag count changes
+ * Update tag count in localStorage and notify listeners
+ * Only used for AutoSearch
  * @param {number} count - The count to update
  */
 export const notifyTagCountChanged = (count) => {
-  // Update localStorage
-  localStorage.setItem('foundTagsCount', count.toString());
-  
-  // Dispatch events for cross-tab and same-tab notification
-  window.dispatchEvent(new Event('storage'));
-  window.dispatchEvent(new CustomEvent(TAGS_COUNT_EVENT, { 
-    detail: { count } 
-  }));
+  try {
+    // Update localStorage
+    localStorage.setItem('foundTagsCount', count.toString());
+    
+    // Dispatch events for notification
+    window.dispatchEvent(new Event('storage'));
+    window.dispatchEvent(new CustomEvent(TAGS_COUNT_EVENT, { 
+      detail: { count } 
+    }));
+  } catch (error) {
+    console.error('Error in notifyTagCountChanged:', error);
+  }
 }; 

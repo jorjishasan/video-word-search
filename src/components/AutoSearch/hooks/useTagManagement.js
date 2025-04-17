@@ -1,54 +1,103 @@
 import { useState, useEffect, useCallback } from 'react';
 import { TAGS_COUNT_EVENT, notifyTagCountChanged } from '../../../utils/tagUtils';
+import { safeGetItem, safeSetItem } from '../../../utils/storageUtils';
+import { hasTranscript, TRANSCRIPT_LOADED_EVENT, VIDEO_CHANGED_EVENT } from '../../../services/youtubeTranscriptService';
 
+/**
+ * Hook for managing auto-search tags
+ */
 export const useTagManagement = (transcript, handleSearch) => {
   const [tags, setTags] = useState(() => {
-    try {
-      return JSON.parse(localStorage.getItem('autoSearchTags')) || [];
-    } catch {
-      return [];
-    }
+    return safeGetItem('autoSearchTags', []);
   });
   
   const [lastTranscript, setLastTranscript] = useState(null);
+  const [lastVideoId, setLastVideoId] = useState(() => {
+    return localStorage.getItem('lastVideoId') || '';
+  });
 
   // Update localStorage whenever tags change
   useEffect(() => {
-    localStorage.setItem('autoSearchTags', JSON.stringify(tags));
+    safeSetItem('autoSearchTags', tags);
   }, [tags]);
 
-  // Custom notification function with direct DOM manipulation if count is zero
-  const notifyWithUIUpdate = useCallback((count) => {
-    // Use the imported utility for localStorage update and event dispatching
-    notifyTagCountChanged(count);
-    
-    // Additional UI update for zero count to handle edge cases
-    setTimeout(() => {      
-      // Force direct UI update for the button color if count is zero
-      if (count === 0) {
-        const button = document.querySelector('button[title="Open Video Word Search"]');
-        if (button && button.className.includes('bg-brand')) {
-          button.className = button.className.replace('bg-brand', 'bg-accent');
-        }
+  // Simple function to update button color - only used by autoSearch
+  const updateButtonColor = useCallback((count) => {
+    const button = document.querySelector('button[title="Open Video Word Search"]');
+    if (button) {
+      const hasTranscriptValue = hasTranscript();
+      
+      if (!hasTranscriptValue) {
+        // No transcript available - use neutral color
+        button.className = button.className.replace(/bg-[a-z]+/, 'bg-neutral');
+      } else if (count > 0) {
+        // Found tags - use brand color
+        button.className = button.className.replace(/bg-[a-z]+/, 'bg-brand');
+      } else {
+        // Has transcript but no found tags - use accent color
+        button.className = button.className.replace(/bg-[a-z]+/, 'bg-accent');
       }
-    }, 0);
+    }
   }, []);
 
-  // Handle transcript changes
+  // Custom notification function for tag count changes
+  const notifyWithUIUpdate = useCallback((count) => {
+    // Update localStorage and dispatch events
+    notifyTagCountChanged(count);
+    
+    // Update button color based on count
+    updateButtonColor(count);
+  }, [updateButtonColor]);
+
+  // Check for video ID changes
   useEffect(() => {
-    // Skip if transcript hasn't changed or if transcript is null
-    if (!transcript || transcript === lastTranscript) return;
+    const currentVideoId = localStorage.getItem('lastVideoId') || '';
     
-    // Always reset the last transcript
-    setLastTranscript(transcript);
+    // If video ID changed, we need to reset tag status
+    if (currentVideoId !== lastVideoId && currentVideoId) {
+      setLastVideoId(currentVideoId);
+      
+      // Reset all tags to not found
+      const updatedTags = tags.map(tag => ({
+        ...tag,
+        found: false
+      }));
+      
+      // Update tags and reset count to 0
+      setTags(updatedTags);
+      notifyTagCountChanged(0);
+      
+      // Reset last transcript to force re-check when transcript is available
+      setLastTranscript(null);
+      
+      // Update UI button background based on hasTranscript
+      updateButtonColor(0);
+    }
     
-    console.log("Transcript changed - updating tags found status");
+    // Listen for video change events to update UI
+    const handleVideoChanged = () => {
+      // Force check for hasTranscript on the new video
+      updateButtonColor(0);
+    };
     
-    // Update tags if we have any, even if they all become "not found"
-    if (tags.length > 0) {
-      // Update all tags with search results
+    window.addEventListener(VIDEO_CHANGED_EVENT, handleVideoChanged);
+    window.addEventListener('popstate', handleVideoChanged);
+    
+    // Clean up
+    return () => {
+      window.removeEventListener(VIDEO_CHANGED_EVENT, handleVideoChanged);
+      window.removeEventListener('popstate', handleVideoChanged);
+    };
+  }, [lastVideoId, tags, updateButtonColor]);
+
+  // Listen for transcript loaded events
+  useEffect(() => {
+    const handleTranscriptLoaded = () => {
+      if (!transcript || tags.length === 0) return;
+      
+      // Check each tag against the new transcript
       const updatedTags = tags.map(tag => {
-        const searchResults = handleSearch(tag.word, true) || [];
+        const searchResults = handleSearch(tag.word, true, null, true) || [];
         return { 
           ...tag, 
           found: searchResults.length > 0 
@@ -58,67 +107,92 @@ export const useTagManagement = (transcript, handleSearch) => {
       // Update tags state
       setTags(updatedTags);
       
-      // ALWAYS update foundTagsCount directly when transcript changes
+      // Update UI with found count
       const foundCount = updatedTags.filter(tag => tag.found).length;
-      console.log(`Found ${foundCount} tags in new transcript`);
+      notifyWithUIUpdate(foundCount);
+    };
+    
+    // Listen for transcript loaded events
+    window.addEventListener(TRANSCRIPT_LOADED_EVENT, handleTranscriptLoaded);
+    
+    // Clean up
+    return () => {
+      window.removeEventListener(TRANSCRIPT_LOADED_EVENT, handleTranscriptLoaded);
+    };
+  }, [tags, handleSearch, notifyWithUIUpdate, transcript]);
+
+  // Handle transcript changes - check which tags are found
+  useEffect(() => {
+    // Skip if transcript hasn't changed or if transcript is null
+    if (!transcript || transcript === lastTranscript) return;
+    
+    // Update last transcript
+    setLastTranscript(transcript);
+    
+    // Update tags if we have any
+    if (tags.length > 0) {
+      // Check each tag against the transcript
+      const updatedTags = tags.map(tag => {
+        const searchResults = handleSearch(tag.word, true, null, true) || [];
+        return { 
+          ...tag, 
+          found: searchResults.length > 0 
+        };
+      });
+      
+      // Update tags state
+      setTags(updatedTags);
+      
+      // Update UI with found count
+      const foundCount = updatedTags.filter(tag => tag.found).length;
       notifyWithUIUpdate(foundCount);
     } else {
-      // If no tags, make sure count is set to 0
+      // If no tags, ensure count is 0
       notifyWithUIUpdate(0);
     }
   }, [transcript, lastTranscript, tags, handleSearch, notifyWithUIUpdate]);
 
+  // Add a new tag
   const addTag = useCallback((word) => {
     const trimmedWord = word.trim();
     if (!trimmedWord) return;
     
+    // Check for duplicates
     const isDuplicate = tags.some(tag => tag.word.toLowerCase() === trimmedWord.toLowerCase());
     if (isDuplicate) return;
     
-    console.log(`Adding tag: ${trimmedWord}`);
-    
+    // Create new tag
     const newTag = { 
       word: trimmedWord, 
       found: false 
     };
     
-    let tagIsFound = false;
+    // Check if tag is found in current transcript
     if (transcript) {
-      const searchResults = handleSearch(trimmedWord, true) || [];
+      const searchResults = handleSearch(trimmedWord, true, null, true) || [];
       newTag.found = searchResults.length > 0;
-      tagIsFound = newTag.found;
-      console.log(`Tag is found in transcript: ${tagIsFound}`);
     }
     
-    // Create new tags array
+    // Add tag to list
     const newTags = [...tags, newTag];
-    
-    // Update tags state
     setTags(newTags);
     
-    // Always update the count
+    // Update UI with new found count
     const newFoundCount = newTags.filter(tag => tag.found).length;
-    console.log(`New found count after adding: ${newFoundCount}`);
     notifyWithUIUpdate(newFoundCount);
   }, [tags, transcript, handleSearch, notifyWithUIUpdate]);
 
+  // Remove a tag
   const removeTag = useCallback((index) => {
-    // Check if the tag being removed was found (to update count)
-    const removedTag = tags[index];
-    const wasFound = removedTag && removedTag.found;
-    
-    console.log(`Removing tag: ${removedTag.word}, was found: ${wasFound}`);
-    
-    // Remove the tag - use optimized approach
+    // Remove the tag
     const newTags = [...tags];
     newTags.splice(index, 1);
     
     // Update tags state
     setTags(newTags);
     
-    // Always update the count
+    // Update UI with new found count
     const newFoundCount = newTags.filter(tag => tag.found).length;
-    console.log(`New found count after removal: ${newFoundCount}`);
     notifyWithUIUpdate(newFoundCount);
   }, [tags, notifyWithUIUpdate]);
 
