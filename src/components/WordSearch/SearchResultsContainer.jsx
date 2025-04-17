@@ -45,8 +45,8 @@ const SearchResultsContainer = ({ results, searchWord }) => {
   });
   
   return (
-    <div className="mt-3 p-3">
-      <div className="bg-black/85 backdrop-blur-sm border border-gray-700/50 rounded-md overflow-hidden shadow-xl">
+    <div className="mt-3">
+      <div className="overflow-hidden ">
         <div className="max-h-64 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-transparent">
           {allOccurrences.map((result, index) => (
             <SearchResultItem 

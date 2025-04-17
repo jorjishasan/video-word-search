@@ -266,9 +266,8 @@ const SearchResultItem = ({ result, searchWord, isLast, isActive, onClick }) => 
   return (
     <div 
       onClick={handleRowClick}
-      className={`flex items-center justify-between p-3 cursor-pointer transition-colors duration-150
-        ${!isLast ? 'border-b border-gray-700' : ''} 
-        ${isActive ? 'bg-gray-700' : 'hover:bg-gray-700 bg-gray-800/60'}`}
+      className={`flex items-center justify-between p-3 cursor-pointer transition-colors duration-200
+        ${isActive ? 'bg-bg-secondary' : ' bg-bg-primary backdrop-blur-sm hover:bg-bg-secondary'}`}
     >
       <div className="flex-1 overflow-hidden whitespace-nowrap text-ellipsis tracking-tight
  mr-4 text-[12px] max-w-full">
