@@ -8,7 +8,7 @@ const ToggleButton = ({ isOpen, setIsOpen, anyTagFound }) => {
 
   return (
     <button 
-      className={`w-16 h-50% rounded-t-lg border-none cursor-pointer flex items-center justify-center overflow-hidden ${
+      className={`w-16 h-40% rounded-t-lg border-none cursor-pointer flex items-center justify-center overflow-hidden ${
         anyTagFound ? 'bg-brand' : 'bg-accent'
       }`}
       onClick={togglePanel}
