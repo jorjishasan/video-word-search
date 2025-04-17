@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
 import { SearchContext } from '../context/SearchContext';
-import WordSearch from './WordSearch';
-import AutoSearch from './AutoSearch';
-import Insights from './Insights';
+import WordSearchTab from './WordSearch/WordSearchTab';
+import AutoSearchTab from './AutoSearch/AutoSearchTab';
+import InsightsTab from './InsightsTab';
 import NoTranscriptMessage from './NoTranscriptMessage';
 
 const SearchContent = () => {
@@ -27,13 +27,16 @@ const SearchContent = () => {
   // Render the appropriate component based on active tab
   switch (activeTab) {
     case 'word-search':
-      return <WordSearch />;
+    case 0:
+      return <WordSearchTab />;
     case 'auto-search':
-      return <AutoSearch />;
+    case 1:
+      return <AutoSearchTab />;
     case 'insights':
-      return <Insights />;
+    case 2:
+      return <InsightsTab />;
     default:
-      return <AutoSearch />;
+      return <AutoSearchTab />;
   }
 };
 
