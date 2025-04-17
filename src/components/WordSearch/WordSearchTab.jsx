@@ -14,7 +14,8 @@ const WordSearchTab = () => {
     results, 
     loading, 
     error, 
-    transcript 
+    transcript,
+    activeTab
   } = useSearch();
   
   // Local state for input and results
@@ -25,6 +26,7 @@ const WordSearchTab = () => {
   // Refs for tracking mounted state and debouncing
   const isMounted = useRef(true);
   const debounceTimerRef = useRef(null);
+  const inputRef = useRef(null);
   
   // Update local results when context results change
   useEffect(() => {
@@ -32,6 +34,17 @@ const WordSearchTab = () => {
       setLocalResults(results);
     }
   }, [results]);
+  
+  // Auto-focus the input when this tab becomes active
+  useEffect(() => {
+    // Check if this tab is active (activeTab === 0) and input exists
+    if (activeTab === 0 && inputRef.current && transcript) {
+      // Focus the input with a slight delay to ensure tab switching is complete
+      setTimeout(() => {
+        inputRef.current.focus();
+      }, 50);
+    }
+  }, [activeTab, transcript]);
   
   // Cleanup on unmount
   useEffect(() => {
@@ -112,6 +125,7 @@ const WordSearchTab = () => {
   return (
     <div >
         <input
+          ref={inputRef}
           type="text"
           value={inputValue}
           onChange={handleInputChange}
