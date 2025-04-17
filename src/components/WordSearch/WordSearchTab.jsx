@@ -22,6 +22,7 @@ const WordSearchTab = () => {
   const [inputValue, setInputValue] = useState(searchWord || '');
   const [localResults, setLocalResults] = useState(results);
   const [activeSearchWord, setActiveSearchWord] = useState(searchWord || '');
+  const [isSearching, setIsSearching] = useState(false);
   
   // Refs for tracking mounted state and debouncing
   const isMounted = useRef(true);
@@ -33,6 +34,8 @@ const WordSearchTab = () => {
     if (results) {
       setLocalResults(results);
     }
+    // End the searching state once results are returned
+    setIsSearching(false);
   }, [results]);
   
   // Auto-focus the input when this tab becomes active
@@ -62,19 +65,36 @@ const WordSearchTab = () => {
       clearTimeout(debounceTimerRef.current);
     }
     
-    if (!value || value.trim().length < 2) {
+    if (!value || value === '') {
       setLocalResults(null);
       setActiveSearchWord('');
+      setIsSearching(false);
       return;
     }
     
+    const cleanValue = value.trim();
+    
+    if (cleanValue.length < 1) {
+      setLocalResults(null);
+      setActiveSearchWord('');
+      setIsSearching(false);
+      return;
+    }
+    
+    // Set searching state to true when starting a search
+    setIsSearching(true);
+    
     debounceTimerRef.current = setTimeout(() => {
       if (isMounted.current) {
-        const cleanValue = value.trim();
-        setActiveSearchWord(cleanValue);
-        setSearchWord(cleanValue);
-        // Use phrase search (non-exact matching) by explicitly setting isExactWordMatch to false
-        handleSearch(cleanValue, false, null, false);
+        try {
+          setActiveSearchWord(cleanValue);
+          setSearchWord(cleanValue);
+          // Use phrase search (non-exact matching) by explicitly setting isExactWordMatch to false
+          handleSearch(cleanValue, false, null, false);
+        } catch (error) {
+          console.error("Search error:", error);
+          setIsSearching(false);
+        }
       }
     }, 300);
   }, [setSearchWord, handleSearch]);
@@ -119,23 +139,43 @@ const WordSearchTab = () => {
   }
   
   // Determine if results should be shown
-  // Only hide results if input is completely empty
-  const shouldShowResults = localResults && !(inputValue === '');
+  const hasResults = localResults && localResults.data && localResults.data.length > 0;
+  const isInputActive = inputValue.trim() !== '';
+  
+  // We'll show the container if either:
+  // 1. We have search results, or
+  // 2. We have active input and aren't showing the initial empty state
+  const shouldShowResultsContainer = isInputActive;
   
   return (
-    <div >
-        <input
-          ref={inputRef}
-          type="text"
-          value={inputValue}
-          onChange={handleInputChange}
-          placeholder="Search word or phrase..."
-          className={INPUT_STYLE}
-          disabled={!transcript}
-        />
+    <div>
+      <input
+        ref={inputRef}
+        type="text"
+        value={inputValue}
+        onChange={handleInputChange}
+        placeholder="Search word or phrase..."
+        className={INPUT_STYLE}
+        disabled={!transcript}
+      />
       
-      
-      {shouldShowResults && <SearchResultsContainer results={localResults} searchWord={activeSearchWord} />}
+      {shouldShowResultsContainer && (
+        <div className="p-3">
+          <div className="bg-bg-primary backdrop-blur-sm border  rounded-md overflow-hidden ">
+            {isSearching ? (
+              <div className="p-4 text-center text-gray-400 text-md">
+                Searching...
+              </div>
+            ) : hasResults ? (
+              <SearchResultsContainer results={localResults} searchWord={activeSearchWord} />
+            ) : (
+              <div className="p-4 text-center text-gray-400 text-sm">
+                No results found for "{inputValue.trim()}"
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
