@@ -4,7 +4,7 @@ import insights from '../assets/insights.svg';
 import autoSearch from '../assets/autoSearch.svg';
 import { useSearch } from '../context/SearchContext';
 import WordSearchTab from './WordSearch/WordSearchTab';
-import InsightsTab from './Insights/InsightsTab';
+import InsightsTab from './InsightsTab';
 import AutoSearchTab from './AutoSearch/AutoSearchTab';
 
 // Import the same event name as used in AutoSearchTab
