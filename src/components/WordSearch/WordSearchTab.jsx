@@ -43,7 +43,7 @@ const WordSearchTab = () => {
     };
   }, []);
   
-  // Debounced search function
+  // Debounced search function - supports phrase search
   const debouncedSearch = useCallback((value) => {
     if (debounceTimerRef.current) {
       clearTimeout(debounceTimerRef.current);
@@ -57,9 +57,11 @@ const WordSearchTab = () => {
     
     debounceTimerRef.current = setTimeout(() => {
       if (isMounted.current) {
-        setActiveSearchWord(value);
-        setSearchWord(value);
-        handleSearch(value);
+        const cleanValue = value.trim();
+        setActiveSearchWord(cleanValue);
+        setSearchWord(cleanValue);
+        // Use phrase search (non-exact matching) by explicitly setting isExactWordMatch to false
+        handleSearch(cleanValue, false, null, false);
       }
     }, 300);
   }, [setSearchWord, handleSearch]);
@@ -103,8 +105,9 @@ const WordSearchTab = () => {
     );
   }
   
-  // Determine if results should be shown - only when input has value and we have results
-  const shouldShowResults = inputValue && inputValue.trim().length > 0 && localResults;
+  // Determine if results should be shown
+  // Only hide results if input is completely empty
+  const shouldShowResults = localResults && !(inputValue === '');
   
   return (
     <div >
