@@ -36,7 +36,7 @@ const UI = () => {
 
 
   return (
-    <div className="flex flex-col items-end font-mono">
+    <div className="flex flex-col items-start font-mono">
       <ToggleButton 
         isOpen={isOpen} 
         setIsOpen={setIsOpen} 
