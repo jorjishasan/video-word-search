@@ -103,6 +103,9 @@ const WordSearchTab = () => {
     );
   }
   
+  // Determine if results should be shown - only when input has value and we have results
+  const shouldShowResults = inputValue && inputValue.trim().length > 0 && localResults;
+  
   return (
     <div >
         <input
@@ -115,7 +118,7 @@ const WordSearchTab = () => {
         />
       
       
-      {localResults && <SearchResultsContainer results={localResults} searchWord={activeSearchWord} />}
+      {shouldShowResults && <SearchResultsContainer results={localResults} searchWord={activeSearchWord} />}
     </div>
   );
 };
