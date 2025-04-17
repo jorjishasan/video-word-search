@@ -212,23 +212,11 @@ const dispatchTranscriptEvent = (eventName, videoId, transcript) => {
 export const searchTranscript = (searchWord, transcript, videoId, isExactWordMatch = false) => {
   if (!searchWord || !transcript) return [];
   
-  console.log("Search request:", { 
-    searchWord, 
-    isExactWordMatch,
-    hasSpaces: searchWord.includes(' ')
-  });
-  
   const results = [];
   const searchWordLower = searchWord.toLowerCase().trim();
   
-  console.log("Normalized search term:", searchWordLower);
-  
   // Skip empty searches
   if (searchWordLower === '') return [];
-  
-  // Log transcript size for debugging
-  const transcriptSize = Object.keys(transcript).length;
-  console.log(`Searching through ${transcriptSize} transcript entries`);
   
   // Handle the case of partial word search with spaces (like "we d")
   // by converting spaces to optional characters that can match any character
@@ -255,7 +243,6 @@ export const searchTranscript = (searchWord, transcript, videoId, isExactWordMat
           });
         }
       } catch (error) {
-        console.error("Regex error:", error);
         // If regex fails, fall back to simple includes check
         if (textLower.includes(searchWordLower)) {
           results.push({
@@ -301,18 +288,12 @@ export const searchTranscript = (searchWord, transcript, videoId, isExactWordMat
             found = allWordsFoundInSequence || searchRegex.test(textLower);
           }
         } catch (error) {
-          console.error("Multi-word search error:", error);
           // Fall back to simple includes if the regex approach fails
           found = textLower.includes(searchWordLower);
         }
       } else {
         // Simple substring match for single words
         found = textLower.includes(searchWordLower);
-      }
-      
-      // Log first few matches for debugging
-      if (found && results.length < 3) {
-        console.log(`Match found at ${timestamp}: "${text.substring(0, 30)}..."`);
       }
       
       if (found) {
@@ -325,8 +306,6 @@ export const searchTranscript = (searchWord, transcript, videoId, isExactWordMat
       }
     }
   });
-  
-  console.log(`Search complete. Found ${results.length} results for "${searchWordLower}"`);
   
   return results;
 };
