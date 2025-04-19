@@ -50,7 +50,7 @@ const injectUI = () => {
       </SearchProvider>
     );
     return true;
-  } catch (error) {
+  } catch {
     return false;
   }
 };
