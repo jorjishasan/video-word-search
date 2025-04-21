@@ -49,7 +49,7 @@ export const seekToTimestamp = (timestamp) => {
     }
     
     return false;
-  } catch (error) {
+  } catch  {
     return false;
   }
 }; 

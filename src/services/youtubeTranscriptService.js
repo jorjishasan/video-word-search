@@ -242,7 +242,7 @@ export const searchTranscript = (searchWord, transcript, videoId, isExactWordMat
             videoId: videoId
           });
         }
-      } catch (error) {
+      } catch {
         // If regex fails, fall back to simple includes check
         if (textLower.includes(searchWordLower)) {
           results.push({
@@ -287,7 +287,7 @@ export const searchTranscript = (searchWord, transcript, videoId, isExactWordMat
             // If either approach finds a match, count it as found
             found = allWordsFoundInSequence || searchRegex.test(textLower);
           }
-        } catch (error) {
+        } catch {
           // Fall back to simple includes if the regex approach fails
           found = textLower.includes(searchWordLower);
         }

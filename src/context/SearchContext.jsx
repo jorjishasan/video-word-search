@@ -1,8 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { useTranscriptSearch } from '../hooks/useTranscriptSearch';
 import { getCurrentVideoId, hasTranscript, TRANSCRIPT_LOADED_EVENT, VIDEO_CHANGED_EVENT } from '../services/youtubeTranscriptService';
-import { safeGetItem, safeSetItem } from '../utils/storageUtils';
-import { notifyTagCountChanged } from '../utils/tagUtils';
+import { safeGetItem } from '../utils/storageUtils';
 
 const SearchContext = createContext({
   activeTab: 'auto-search',
