@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { TAGS_COUNT_EVENT, notifyTagCountChanged } from '../../../utils/tagUtils';
+import { notifyTagCountChanged } from '../../../utils/tagUtils';
 import { safeGetItem, safeSetItem } from '../../../utils/storageUtils';
 import { hasTranscript, TRANSCRIPT_LOADED_EVENT, VIDEO_CHANGED_EVENT } from '../../../services/youtubeTranscriptService';
 
