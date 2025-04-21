@@ -5,6 +5,7 @@ import { hasTranscript } from '../../services/youtubeTranscriptService';
 
 const TagsContainer = ({ tags, onTagRemove }) => {
   // Keep track of hasTranscript state to force re-renders when it changes
+  // eslint-disable-next-line no-unused-vars
   const [transcriptAvailable, setTranscriptAvailable] = useState(hasTranscript());
   
   // Listen for storage events which might affect hasTranscript

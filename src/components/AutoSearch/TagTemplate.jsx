@@ -16,7 +16,7 @@ const Tag = ({ tag, onTagRemove }) => {
       >
         <div className="flex items-center text-[14px] font-medium">{tag.word.toUpperCase()}</div>
         <button 
-          onClick={(e) => { onTagRemove(); }}
+          onClick={() => { onTagRemove(); }}
           className={`w-6 h-6 flex items-center justify-center ml-3 rounded-full bg-white ${btnTextColor} hover:bg-gray-200 transition-colors cursor-pointer`}
           aria-label="Remove tag"
           title="Remove tag"
