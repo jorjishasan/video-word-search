@@ -24,7 +24,7 @@ const ToggleButton = ({ isOpen, setIsOpen, anyTagFound }) => {
   const imgStyle = {
     width: '100%', // w-full
     objectFit: 'contain', // object-contain
-    marginTop: '-4px', // -mt-[4px]
+    marginTop: '-5px', // -mt-[5px]
   };
 
   return (

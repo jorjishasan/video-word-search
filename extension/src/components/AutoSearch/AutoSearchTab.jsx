@@ -13,8 +13,7 @@ const TagLegend = () => {
       alignItems: 'center',
       justifyContent: 'center',
       gap: '1rem', // gap-4
-      marginTop: '0.75rem', // mt-3
-      marginBottom: '0.25rem', // mb-1
+      margin: '0.50rem 0', // mt-3
       fontSize: '0.875rem', // text-sm
       color: COLORS.gray[100] // text-gray-100
     }}>
