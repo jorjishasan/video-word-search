@@ -45,7 +45,6 @@ const formatTranscript = (text, word) => {
       // For each occurrence of the first word, check if the rest of the words follow
       let isFullMatch = true;
       let matchEnd = firstWordPos + firstWord.length;
-      let matchText = '';
       
       // Try to find the remaining words in sequence
       for (let i = 1; i < searchWords.length; i++) {
@@ -135,7 +134,7 @@ const formatTranscript = (text, word) => {
     const fragments = [];
     
     // Process each match
-    matches.forEach((match, idx) => {
+    matches.forEach((match) => {
       // Add text before the match
       if (match.start > lastIndex) {
         fragments.push({
@@ -253,7 +252,7 @@ const formatTranscript = (text, word) => {
 /**
  * Search result item component
  */
-const SearchResultItem = ({ result, searchWord, isLast, isActive, onClick }) => {
+const SearchResultItem = ({ result, searchWord, isActive, onClick }) => {
   const { playAtTimestamp } = usePlayback();
   
   const timestamp = result.timestamp;
