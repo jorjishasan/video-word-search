@@ -1,0 +1,33 @@
+{
+  "name": "video-word-search-landing",
+  "version": "1.0.0",
+  "description": "Landing page for Video Word Search Chrome Extension",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "keywords": [
+    "video",
+    "search",
+    "chrome-extension",
+    "landing-page"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "critters": "^0.0.20",
+    "framer-motion": "^11.0.0",
+    "gsap": "^3.12.7",
+    "next": "^15.3.1",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "split-type": "^0.3.4"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.17",
+    "postcss": "^8.4.35",
+    "tailwindcss": "^3.4.1"
+  }
+}
