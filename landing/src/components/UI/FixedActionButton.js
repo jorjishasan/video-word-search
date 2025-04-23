@@ -208,7 +208,7 @@ const FixedActionButton = () => {
               animate={attentionPhase}
             >
               <GiftIcon animate={attentionPhase} />
-              <span className="text-sm">Grab it free</span>
+              <span className="text-sm uppercase font-bold text-gray-950">Grab it free</span>
               <CountdownDisplay 
                 hours={timeLeft.hours} 
                 minutes={timeLeft.minutes} 
