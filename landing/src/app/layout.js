@@ -1,6 +1,7 @@
 import '../styles/globals.css';
 import { GeistSans } from 'geist/font/sans';
 import { GeistMono } from 'geist/font/mono';
+import FixedActionButton from '@/components/UI/FixedActionButton';
 
 export const metadata = {
   title: 'VidSift - Advanced Video Content Search',
@@ -37,6 +38,7 @@ export default function RootLayout({ children }) {
         <div className="relative min-h-screen overflow-hidden">
           {children}
         </div>
+        <FixedActionButton />
       </body>
     </html>
   );
