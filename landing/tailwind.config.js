@@ -34,8 +34,8 @@ module.exports = {
         }
       },
       fontFamily: {
-        sans: ['var(--font-inter)', 'system-ui', 'sans-serif'],
-        mono: ['var(--font-roboto-mono)', 'monospace'],
+        sans: ['var(--font-geist-sans)', 'system-ui', 'sans-serif'],
+        mono: ['var(--font-geist-mono)', 'monospace'],
       },
       animation: {
         'marquee': 'marquee 25s linear infinite',
@@ -47,6 +47,7 @@ module.exports = {
         'glow': 'glow 2s ease-in-out infinite alternate',
         'gradient-text': 'gradient-text 4s ease infinite',
         'blur-in': 'blur-in 0.7s cubic-bezier(0.11, 0, 0.5, 0)',
+        'aurora': 'aurora 10s ease infinite',
       },
       keyframes: {
         marquee: {
@@ -81,6 +82,11 @@ module.exports = {
         'blur-in': {
           '0%': { filter: 'blur(12px)', opacity: '0' },
           '100%': { filter: 'blur(0)', opacity: '1' },
+        },
+        'aurora': {
+          '0%': { backgroundPosition: '0% 50%' },
+          '50%': { backgroundPosition: '100% 50%' },
+          '100%': { backgroundPosition: '0% 50%' },
         },
       },
       backgroundImage: {

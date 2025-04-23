@@ -1,17 +1,12 @@
 import '../styles/globals.css';
-import { Inter } from 'next/font/google';
-
-// Configure the Inter font with specific subsets
-const inter = Inter({ 
-  subsets: ['latin'],
-  variable: '--font-inter',
-  display: 'swap'
-});
+import { GeistSans } from 'geist/font/sans';
+import { GeistMono } from 'geist/font/mono';
 
 export const metadata = {
   title: 'VidSift - Advanced Video Content Search',
   description: 'Search inside any YouTube video to find exactly what you need. Our AI-powered search tool instantly finds every mention of your keywords in video content.',
   keywords: 'video search, transcript search, YouTube search, content search, AI search',
+  metadataBase: new URL('https://vidsift.com'),
   openGraph: {
     title: 'VidSift - Search Inside Any YouTube Video',
     description: 'Extract value from video content with advanced transcript search and AI-powered analysis.',
@@ -21,8 +16,8 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className="scroll-smooth">
-      <body className={`${inter.variable} font-sans antialiased text-white bg-background`}>
+    <html lang="en" className={`scroll-smooth ${GeistSans.variable} ${GeistMono.variable}`}>
+      <body className="font-sans antialiased text-white bg-background">
         {/* Modern star field background */}
         <div className="fixed inset-0 bg-background -z-10 overflow-hidden">
           {/* Dynamic background with stars */}
