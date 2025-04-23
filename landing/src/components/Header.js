@@ -55,9 +55,9 @@ const Header = () => {
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.5, delay: 0.1 }}
-                  className="text-xl font-bold tracking-tight uppercase"
+                  className="text-base font-bold text-gray-400 uppercase hover:text-gray-300"
                 >
-                  Video<span className="text-red-600 lowercase">word</span>search
+                  Video-word-search
                 </motion.div>
               </div>
             </Link>
