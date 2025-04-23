@@ -91,10 +91,10 @@ const Hero = () => {
         <div className="flex flex-col items-center w-full">
           {/* Main heading with Aurora effect using subheading content but with heading styling */}
           <motion.h1 
-            className="text-3xl md:text-[2.75rem] font-bold mb-5"
+            className="text-3xl md:text-5xl font-bold mb-5"
             variants={itemVariants}
           >
-            <AuroraText speed={1.2}>
+            <AuroraText speed={1.5}>
               Find words in Videos Instantly,
             </AuroraText>
           </motion.h1>
