@@ -1,33 +1,14 @@
-'use client';
 
-import { useState, useEffect } from 'react';
-import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
-import logoIcon from '../assets/logo.svg';
+import { useHeader } from '@/components/Header/useHeader';
 import Image from 'next/image';
+import Link from 'next/link';
 import { CHROME_EXTENSION_LINK_FROM_WEBSTORE } from '@/utils/constants';
-// Header component
-const Header = () => {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  
-  // Navigation links
-  const navLinks = [
-    { name: 'Features', href: '#features' },
-    { name: 'Testimonials', href: '#testimonials' },
-    { name: 'Pricing', href: '#pricing' },
-    { name: 'Faqs', href: '#faqs' },
-  ];
+import logoIcon from '../../assets/logo.svg';
 
-  // Handle scroll effects for header
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
-    
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+const Header = () => {
+  // Custom hook to manage header state
+  const { isScrolled, isMobileMenuOpen, navLinks, toggleMobileMenu, closeMobileMenu } = useHeader();
   
   return (
     <>
@@ -109,7 +90,7 @@ const Header = () => {
             {/* Mobile menu button */}
             <div className="md:hidden">
               <button
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                onClick={toggleMobileMenu}
                 aria-label="Toggle menu"
                 className="p-2 rounded-lg bg-white/5 hover:bg-white/10 transition-colors focus:outline-none"
               >
@@ -152,7 +133,7 @@ const Header = () => {
                   <motion.a
                     key={link.name}
                     href={link.href}
-                    onClick={() => setIsMobileMenuOpen(false)}
+                    onClick={closeMobileMenu}
                     className="px-4 py-3 text-white/80 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -167,7 +148,7 @@ const Header = () => {
                     href={CHROME_EXTENSION_LINK_FROM_WEBSTORE}
                     target="_blank"
                     rel="noopener noreferrer"
-                    onClick={() => setIsMobileMenuOpen(false)}
+                    onClick={closeMobileMenu}
                     className="flex items-center justify-center px-4 py-3 rounded-lg text-white font-medium bg-gradient-to-r from-primary to-accent"
                   >
                     <span className="mr-2">
@@ -190,6 +171,6 @@ const Header = () => {
       <div className={`h-16 md:h-20 transition-all duration-300 ${isScrolled ? 'md:h-16' : 'md:h-24'}`}></div>
     </>
   );
-};
+}
 
 export default Header;
