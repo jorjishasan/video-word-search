@@ -11,7 +11,6 @@ export const metadata = {
   openGraph: {
     title: 'VideoWordSearch - Search Inside Any YouTube Video Instantly',
     description: 'Never miss important information in videos again. VideoWordSearch helps you find exactly what you need in any YouTube video with precision word searching and AI-powered content analysis.',
-    images: ['/og-image.png'],
     type: 'website',
     locale: 'en_US',
     siteName: 'VideoWordSearch'
@@ -20,7 +19,6 @@ export const metadata = {
     card: 'summary_large_image',
     title: 'VideoWordSearch - Find Exact Words in YouTube Videos',
     description: 'Search for specific words and phrases in any YouTube video with our powerful extension. Save hours of watching time!',
-    images: ['/og-image.png'],
     creator: '@jorjishasan'
   },
   alternates: {
@@ -43,9 +41,6 @@ export default function RootLayout({ children }) {
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
-        <link rel="apple-touch-icon" href="/favicon.ico" />
-        <link rel="shortcut icon" href="/favicon.ico" />
       </head>
       <body className="font-sans antialiased text-white bg-background">
         {/* Simple gradient background */}
