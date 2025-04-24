@@ -69,7 +69,7 @@ const ANIMATION_TIMING = {
 // Memoized GiftIcon component
 const GiftIcon = memo(({ animate }) => (
   <motion.div variants={iconVariants} animate={animate}>
-    <Image src={giftFilledIcon} alt="Gift" width={24} height={24} priority />
+    <Image src={giftFilledIcon} alt="Gift" width={28} height={28} priority />
   </motion.div>
 ));
 
@@ -200,11 +200,11 @@ const FixedActionButton = () => {
             },
           }}
           exit={{ y: 100, opacity: 0 }}
-          className="fixed bottom-5 right-5 z-50"
+          className="fixed bottom-8 right-4 z-50"
         >
           <Link href={CHROME_EXTENSION_LINK_FROM_WEBSTORE} target="_blank" rel="noopener noreferrer">
             <motion.button
-              className="flex items-center gap-3 px-5 py-2.5 text-white font-semibold rounded-full shadow-lg hover:scale-105 transform transition-transform duration-300 ease-in-out"
+              className="flex items-center gap-3 px-6 py-3 text-white font-semibold rounded-full shadow-lg hover:scale-105 transform transition-transform duration-300 ease-in-out"
               style={gradientStyle}
               whileHover={{ scale: 1.05 }}
               variants={buttonVariants}
