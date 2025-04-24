@@ -11,6 +11,14 @@ export const metadata = {
   openGraph: {
     title: 'VideoWordSearch - Search Inside Any YouTube Video Instantly',
     description: 'Never miss important information in videos again. VideoWordSearch helps you find exactly what you need in any YouTube video with precision word searching and AI-powered content analysis.',
+    images: [
+      {
+        url: '/opengraph-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'VideoWordSearch OG Image',
+      },
+    ],
     type: 'website',
     locale: 'en_US',
     siteName: 'VideoWordSearch'
@@ -19,6 +27,7 @@ export const metadata = {
     card: 'summary_large_image',
     title: 'VideoWordSearch - Find Exact Words in YouTube Videos',
     description: 'Search for specific words and phrases in any YouTube video with our powerful extension. Save hours of watching time!',
+    images: ['/opengraph-image.png'],
     creator: '@jorjishasan'
   },
   alternates: {
