@@ -1,4 +1,3 @@
-
 import { motion, AnimatePresence } from 'framer-motion';
 import { useHeader } from '@/components/Header/useHeader';
 import Image from 'next/image';
@@ -29,8 +28,14 @@ const Header = () => {
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.5 }}
                 >
-                  <Image src={logoIcon} alt="Logo" width={36} height={36} className="w-8 h-8 mr-2" />
-                  
+                  <Image 
+                    src={logoIcon} 
+                    alt="Logo" 
+                    width={36} 
+                    height={36} 
+                    className="w-8 h-8 mr-2"
+                    priority 
+                  />
                 </motion.div>
                 <motion.div
                   initial={{ opacity: 0, x: -10 }}

@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
@@ -87,10 +89,9 @@ const Hero = () => {
               <Image 
                 src={videoPoster} 
                 alt="Video Word Search Demo" 
-                layout="fill" 
-                objectFit="cover"
+                fill
                 priority
-                className="transition-transform duration-500 group-hover:scale-[1.04]"
+                className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
               />
             </div>
           </motion.div>
