@@ -5,7 +5,7 @@ import Language from '@/components/Language/Language';
 import Testimonial from '@/components/Testimonial/Testimonial';
 import Pricing from '@/components/Pricing/Pricing';
 import Faq from '@/components/Faq/Faq';
-import Footer from '@/components/Footer';
+import Footer from '@/components/Footer/Footer';
 
 export default function Home() {
   return (
