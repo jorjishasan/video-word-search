@@ -47,7 +47,7 @@ const FooterBadgesClient = () => {
       <div className="mt-10 text-center">
         <Link href={socials.twitter} target="_blank" rel="noopener noreferrer">
           <motion.p 
-            className="text-sm text-white/60 items-center justify-center inline-flex hover:text-white/80 transition-colors px-4 py-2 rounded-full bg-white/5 hover:bg-white/8 transition-all duration-300"
+            className="text-sm text-white/60 items-center justify-center inline-flex hover:text-white/80 px-4 py-2 rounded-full bg-white/5 hover:bg-white/8 transition-all duration-300"
             whileHover={{ scale: 1.03 }}
             onMouseEnter={() => setIsHeartHovered(true)}
             onMouseLeave={() => setIsHeartHovered(false)}
