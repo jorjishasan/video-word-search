@@ -1,3 +1,5 @@
+'use client';
+
 import { motion, AnimatePresence } from 'framer-motion';
 import { useHeader } from '@/components/Header/useHeader';
 import Image from 'next/image';
