@@ -1,11 +1,14 @@
 'use client';
+
 import React, { useState, useEffect, useCallback, memo } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import Counter from './Counter';
-import giftFilledIcon from '../../assets/gift-filled.svg';
+import giftFilledIcon from "@/assets/gift-filled.svg";
 import Link from 'next/link';
 import { CHROME_EXTENSION_LINK_FROM_WEBSTORE } from '@/utils/constants';
+
+
 // Animation variants defined outside component to prevent recreating on each render
 const buttonVariants = {
   idle: { scale: 1, x: 0 },
