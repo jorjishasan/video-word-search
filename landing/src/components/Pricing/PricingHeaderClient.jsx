@@ -40,8 +40,8 @@ const PricingHeaderClient = () => {
       variants={containerVariants}
     >
       <SectionTag
-        bgColor="bg-[#EC4899]/15"
-        textColor="text-[#F9A8D4]"
+              bgColor="bg-[#4D7CFF]/15"
+              textColor="text-[#8E9EFF]"
       >
         Subscription Plans
       </SectionTag>
@@ -51,9 +51,9 @@ const PricingHeaderClient = () => {
         variants={itemVariants}
       >
         <AuroraText
-          colors={['#EC4899', '#F472B6', '#F9A8D4', '#FBCFE8', '#FCE7F3']}
+          colors={['#4D7CFF', '#6A8DFF', '#8E9EFF', '#B292FF', '#D685FF']}
           className="font-bold"
-          speed={0.9}
+          speed={1.2}
         >
           Choose Your Plan
         </AuroraText>
