@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import AuroraText from '../UI/AuroraText';
@@ -54,42 +54,32 @@ const HeroClient = () => {
   
   // Define use cases directly in the component
   const useCases = [
-    { title: "Verified", duration: 2000 },
-    { title: "Fast", duration: 2000 },
-    { title: "Accurate", duration: 2000 }
+    { title: "Content creator?", duration: 1000 },
+    { title: "An Entrepreneur?", duration: 1000 },
+    { title: "Product Person?", duration: 1000 }
   ];
 
-  // Effect to handle the animation cycle
+  // Effect to handle the animation cycle - similar to original implementation
   useEffect(() => {
-    let animationFrame;
-    let startTime;
+    const fillInterval = setInterval(() => {
+      setFillProgress(prev => {
+        if (prev >= 100) {
+          clearInterval(fillInterval);
+          
+          // When filling completes, cycle to next use case after a delay
+          setTimeout(() => {
+            setActiveUseCase(prevCase => (prevCase + 1) % useCases.length);
+            setFillProgress(0);
+          }, 300);
+          
+          return 100;
+        }
+        return prev + 0.8; // Increment at a steady rate
+      });
+    }, 16); // 60fps-like updates
     
-    const duration = useCases[activeUseCase]?.duration || 2000;
-    
-    const animate = (timestamp) => {
-      if (!startTime) startTime = timestamp;
-      
-      const elapsed = timestamp - startTime;
-      const progress = Math.min(elapsed / duration * 100, 100);
-      
-      setFillProgress(progress);
-      
-      if (progress < 100) {
-        animationFrame = requestAnimationFrame(animate);
-      } else {
-        // Move to next use case when animation completes
-        setTimeout(() => {
-          setActiveUseCase((prev) => (prev + 1) % useCases.length);
-        }, 300);
-      }
-    };
-    
-    animationFrame = requestAnimationFrame(animate);
-    
-    return () => {
-      cancelAnimationFrame(animationFrame);
-    };
-  }, [activeUseCase, useCases]);
+    return () => clearInterval(fillInterval);
+  }, [activeUseCase, useCases.length]);
 
   return (
     <motion.div 
@@ -181,7 +171,7 @@ const HeroClient = () => {
                   )}
                 </div>
                 
-                <p className={`mt-2 text-sm  font-medium ${index === activeUseCase ? 'text-green-500' : 'text-gray-400'}`}>
+                <p className={`mt-2 text-sm font-medium ${index === activeUseCase ? 'text-green-500' : 'text-gray-400'}`}>
                   {useCase.title}
                 </p>
               </div>
@@ -194,7 +184,6 @@ const HeroClient = () => {
             </React.Fragment>
           ))}
         </motion.div>
-
       </div>
     </motion.div>
   );
