@@ -4,7 +4,10 @@ import { GeistMono } from 'geist/font/mono';
 import FixedActionButton from '@/components/FixedActionButton/FixedActionButton';
 
 export const metadata = {
-  title: 'VideoWordSearch - Find Exact Moments in Any YouTube Video',
+  title: {
+    default: 'VideoWordSearch - Search Inside Any YouTube Video Instantly',
+    template: '%s - VideoWordSearch'
+  },
   description: 'Instantly search inside any YouTube video and jump to exact moments where keywords are mentioned. Save time with VideoWordSearch\'s powerful transcript analysis and word detection technology.',
   keywords: 'video word search, YouTube search tool, find words in videos, video transcript search, keyword timestamps, YouTube content navigator, video word finder, transcript analyzer',
   metadataBase: new URL('https://videowordsearch.com'),
@@ -40,6 +43,7 @@ export default function RootLayout({ children }) {
     <html lang="en" className={`scroll-smooth ${GeistSans.variable} ${GeistMono.variable}`}>
       <head>
         <meta charSet="utf-8" />
+        <meta name="google-site-verification" content="L_-58tJ0wGsGol5hVbmMlnexbGg46_iB2sov53cGfiA" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </head>
       <body className="font-sans antialiased text-white bg-background">
