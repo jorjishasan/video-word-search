@@ -8,8 +8,8 @@ export const metadata = {
     default: 'VideoWordSearch - Search Inside Any YouTube Video Instantly',
     template: '%s - VideoWordSearch'
   },
-  description: 'Instantly search inside any YouTube video and jump to exact moments where keywords are mentioned. Save time with VideoWordSearch\'s powerful transcript analysis and word detection technology.',
-  keywords: 'video word search, YouTube search tool, find words in videos, video transcript search, keyword timestamps, YouTube content navigator, video word finder, transcript analyzer',
+  description: 'Instantly search inside any YouTube video for specific words or phrases and jump to exact moments. Save time with VideoWordSearch\'s powerful transcript analysis and word detection Chrome extension.',
+  keywords: 'video word search, YouTube search tool, find words in videos, video transcript search, keyword timestamps, YouTube content navigator, video word finder, transcript analyzer, search youtube video text, chrome extension video search, youtube keyword finder, video content analysis',
   metadataBase: new URL('https://videowordsearch.com'),
   openGraph: {
     title: 'VideoWordSearch - Search Inside Any YouTube Video Instantly',
@@ -20,9 +20,9 @@ export const metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'VideoWordSearch - Find Exact Words in YouTube Videos',
-    description: 'Search for specific words and phrases in any YouTube video with our powerful extension. Save hours of watching time!',
-    creator: 'jorjishasan'
+    title: 'VideoWordSearch - Find Exact Words in YouTube Videos Instantly',
+    description: 'Search for specific words and phrases in any YouTube video with our powerful Chrome extension. Save hours of watching time and find information faster!',
+    creator: '@jorjishasan_' // Make sure this is the correct Twitter handle
   },
   alternates: {
     canonical: 'https://videowordsearch.com'
@@ -34,7 +34,7 @@ export const metadata = {
   authors: [{ name: 'VideoWordSearch Team' }],
   category: 'Technology',
   verification: {
-    google: 'google-site-verification-code'
+    google: 'L_-58tJ0wGsGol5hVbmMlnexbGg46_iB2sov53cGfiA' // TODO: Replace with your actual code
   }
 };
 
