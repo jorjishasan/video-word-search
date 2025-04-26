@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Video Word Search",
   "version": "1.0.0",
-  "description": "Easily search for words and phrases in YouTube video transcripts. Find exact moments, create auto-search tags, and get video insights.",
+  "description": "Easily search for words and phrases in YouTube video. Find exact moments, create auto-search tags, and get video insights.",
   "permissions": [
     "activeTab"
   ],
