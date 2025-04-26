@@ -4,8 +4,7 @@
   "version": "1.0.0",
   "description": "Easily search for words and phrases in YouTube video transcripts. Find exact moments, create auto-search tags, and get video insights.",
   "permissions": [
-    "activeTab",
-    "storage"
+    "activeTab"
   ],
   "host_permissions": [
     "https://*.youtube.com/*"
@@ -32,4 +31,4 @@
   "author": "uiforest",
   "short_name": "VideoWordSearch",
   "homepage_url": "https://videowordsearch.com"
-} 
+}
