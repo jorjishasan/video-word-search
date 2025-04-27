@@ -2,6 +2,7 @@ import '../styles/globals.css';
 import { GeistSans } from 'geist/font/sans';
 import { GeistMono } from 'geist/font/mono';
 import FixedActionButton from '@/components/FixedActionButton/FixedActionButton';
+import Script from 'next/script';
 
 export const metadata = {
   title: {
@@ -45,6 +46,23 @@ export default function RootLayout({ children }) {
         <meta charSet="utf-8" />
         <meta name="google-site-verification" content="L_-58tJ0wGsGol5hVbmMlnexbGg46_iB2sov53cGfiA" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        {/* Google Analytics */}
+        <Script
+          strategy="afterInteractive"
+          src="https://www.googletagmanager.com/gtag/js?id=G-CK31J2E86Z"
+        />
+        <Script
+          id="google-analytics"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-CK31J2E86Z');
+            `,
+          }}
+        />
       </head>
       <body className="font-sans antialiased text-white bg-background">
         {/* Simple gradient background */}
