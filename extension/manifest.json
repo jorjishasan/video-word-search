@@ -3,9 +3,7 @@
   "name": "Video Word Search",
   "version": "1.0.0",
   "description": "Easily search for words and phrases in YouTube video. Find exact moments, create auto-search tags, and get video insights.",
-  "permissions": [
-    "activeTab"
-  ],
+  "permissions": [],
   "host_permissions": [
     "https://*.youtube.com/*"
   ],
