@@ -47,7 +47,7 @@ const PricingHeaderClient = () => {
       </SectionTag>
       
       <motion.h2 
-        className="text-3xl md:text-5xl font-bold mb-6"
+        className="text-3xl md:text-5xl font-bold mt-4 mb-3"
         variants={itemVariants}
       >
         <AuroraText

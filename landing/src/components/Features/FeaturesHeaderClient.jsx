@@ -43,11 +43,11 @@ const FeaturesHeaderClient = () => {
         bgColor="bg-[#4D7CFF]/15"
         textColor="text-[#8E9EFF]"
       >
-        Powerful Features
+        Features
       </SectionTag>
       
       <motion.h2 
-        className="text-3xl md:text-5xl font-bold mb-6"
+        className="text-3xl md:text-5xl font-bold mt-4 mb-3"
         variants={itemVariants}
       >
         <AuroraText
