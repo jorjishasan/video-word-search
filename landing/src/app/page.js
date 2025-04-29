@@ -3,6 +3,7 @@ import Hero from '@/components/Hero/Hero';
 import Feature from '@/components/Features/Feature';
 import Language from '@/components/Language/Language';
 import Testimonial from '@/components/Testimonial/Testimonial';
+import UseCases from '@/components/UseCases/UseCases'; // Import the new component
 import Pricing from '@/components/Pricing/Pricing';
 import Faq from '@/components/Faq/Faq';
 import Footer from '@/components/Footer/Footer';
@@ -53,6 +54,9 @@ export default function Home() {
       
       {/* Feature Component */}
       <Feature />
+
+      {/* Use Cases Section (New) */}
+      <UseCases />
       
       {/* Language Component */}
       <Language />
