@@ -36,7 +36,7 @@ const HeaderClient = ({ navLinks }) => {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between">
             {/* Logo */}
-            <Link href="#" className="flex items-center">
+            <a href="#" className="flex items-center">
               <div className="relative flex items-center">
                 <motion.div 
                   initial={{ opacity: 0, scale: 0.8 }}
@@ -61,7 +61,7 @@ const HeaderClient = ({ navLinks }) => {
                   Video-word-search
                 </motion.div>
               </div>
-            </Link>
+            </a>
             
             {/* Desktop Navigation */}
             <nav className="hidden md:flex items-center space-x-8">
