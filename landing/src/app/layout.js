@@ -6,24 +6,24 @@ import Script from 'next/script';
 
 export const metadata = {
   title: {
-    default: 'VideoWordSearch - Search Inside Any YouTube Video Instantly',
+    default: 'Video Word Search Tool - Search Inside YouTube Videos | VideoWordSearch',
     template: '%s - VideoWordSearch'
   },
-  description: 'Instantly search inside any YouTube video for specific words or phrases and jump to exact moments. Save time with VideoWordSearch\'s powerful transcript analysis and word detection Chrome extension.',
+  description: 'Perform instant video word search inside any YouTube video. Find specific words or phrases and jump to exact moments with the VideoWordSearch Chrome extension.',
   keywords: 'video word search, YouTube search tool, find words in videos, video transcript search, keyword timestamps, YouTube content navigator, video word finder, transcript analyzer, search youtube video text, chrome extension video search, youtube keyword finder, video content analysis',
   metadataBase: new URL('https://videowordsearch.com'),
   openGraph: {
-    title: 'VideoWordSearch - Search Inside Any YouTube Video Instantly',
-    description: 'Never miss important information in videos again. VideoWordSearch helps you find exactly what you need in any YouTube video with precision word searching and AI-powered content analysis.',
+    title: 'Video Word Search Tool - Search Inside YouTube Videos | VideoWordSearch',
+    description: 'Use VideoWordSearch for powerful video word search. Find exactly what you need in YouTube videos with precision word searching and AI content analysis.',
     type: 'website',
     locale: 'en_US',
     siteName: 'VideoWordSearch'
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'VideoWordSearch - Find Exact Words in YouTube Videos Instantly',
-    description: 'Search for specific words and phrases in any YouTube video with our powerful Chrome extension. Save hours of watching time and find information faster!',
-    creator: '@jorjishasan_' // Make sure this is the correct Twitter handle
+    title: 'VideoWordSearch: Powerful Video Word Search Chrome Extension',
+    description: 'Effortlessly perform video word search in YouTube content with our Chrome extension. Save time and find information faster!',
+    creator: '@jorjishasan_'
   },
   alternates: {
     canonical: 'https://videowordsearch.com'
@@ -35,7 +35,7 @@ export const metadata = {
   authors: [{ name: 'VideoWordSearch Team' }],
   category: 'Technology',
   verification: {
-    google: 'L_-58tJ0wGsGol5hVbmMlnexbGg46_iB2sov53cGfiA' // TODO: Replace with your actual code
+    google: 'L_-58tJ0wGsGol5hVbmMlnexbGg46_iB2sov53cGfiA'
   }
 };
 

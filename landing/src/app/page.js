@@ -14,6 +14,7 @@ export default function Home() {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
     "name": "VideoWordSearch",
+    "alternateName": "Video Word Search Tool", // Added alternateName
     "operatingSystem": "Chrome OS, Windows, macOS, Linux", // Operating systems supported by Chrome
     "applicationCategory": "BrowserApplication",
     "aggregateRating": {
@@ -26,7 +27,7 @@ export default function Home() {
       "price": "0", // Assuming the extension is free
       "priceCurrency": "USD"
     },
-    "description": "Instantly search inside any YouTube video for specific words or phrases and jump to exact moments. Save time with VideoWordSearch's powerful transcript analysis and word detection Chrome extension.",
+    "description": "Instantly perform video word search inside any YouTube video for specific words or phrases. Jump to exact moments with VideoWordSearch's powerful transcript analysis and word detection Chrome extension.", // Updated description
     "url": "https://videowordsearch.com",
     "potentialAction": {
       "@type": "InstallAction",

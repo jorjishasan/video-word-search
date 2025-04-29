@@ -1,8 +1,8 @@
 // Define the features data
 export const FEATURES = [
   {
-    title: 'Instant Word Search',
-    description: 'Find specific words or phrases in any video content with millisecond precision. Jump directly to the exact moment.',
+    title: 'Instant Video Word Search',
+    description: 'Perform precise video word search to find specific words or phrases in content instantly. Jump directly to the exact moment.',
     icon: (
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-8 h-8">
         <circle cx="11" cy="11" r="8"></circle>
@@ -15,8 +15,8 @@ export const FEATURES = [
     hoverEffect: 'group-hover:rotate-6'
   },
   {
-    title: 'Auto Tagging',
-    description: 'Our AI automatically identifies key topics and concepts in videos, making search even more intuitive.',
+    title: 'AI Auto Tagging',
+    description: 'Our AI automatically identifies key topics and concepts, enhancing your video word search experience and making it more intuitive.',
     icon: (
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-8 h-8">
         <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
@@ -39,8 +39,8 @@ export const FEATURES = [
     hoverEffect: 'group-hover:translate-y-[-5px]'
   },
   {
-    title: 'Multi-language Support',
-    description: 'Search across videos in 20+ languages with our advanced language processing capabilities.',
+    title: 'Multi-language Video Search',
+    description: 'Execute video word search across content in 20+ languages with our advanced language processing capabilities.',
     icon: (
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-8 h-8">
         <path d="M5 8l6 6"></path>

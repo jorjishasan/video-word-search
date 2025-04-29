@@ -2,20 +2,20 @@
 export const FAQ_CONFIG = {
   faqs: [
     {
-      question: "How accurate is the video word search?",
-      answer: "Our search technology delivers industry-leading accuracy with a 98.7% match rate for clearly spoken content. The system continuously improves through machine learning to handle different accents, background noise, and speaking styles."
+      question: "How accurate is the video word search feature?",
+      answer: "Our video word search technology delivers industry-leading accuracy (98.7% match rate for clear audio). It improves continuously to handle accents, noise, and styles."
     },
     {
-      question: "Can I search across multiple videos at once?",
-      answer: "Yes! Our Pro and Enterprise plans allow batch searching across your entire video library. Simply create a collection, add your videos, and search across all content simultaneously."
+      question: "Can I perform video word search across multiple files?",
+      answer: "Yes! Pro/Enterprise plans allow batch video word search across your library. Create a collection, add videos, and search all content simultaneously."
     },
     {
       question: "Which video platforms are supported?",
       answer: "We currently support YouTube, Vimeo, Wistia, and direct video file uploads. Our API also allows integration with custom video players and platforms. We're constantly expanding our supported platforms."
     },
     {
-      question: "How does the automated tagging work?",
-      answer: "Our AI analyzes your video content to identify key topics, names, products, and concepts. It automatically generates tags based on context and relevance, helping users find your content through natural language queries."
+      question: "How does the automated tagging improve video word search?",
+      answer: "Our AI analyzes content to identify topics, names, etc., generating tags. This helps users find content via natural language queries, complementing direct video word search."
     },
     {
       question: "Is there a limit to the number of videos I can search?",
