@@ -10,7 +10,7 @@ const SectionTag = memo(
     textColor = 'text-primary',
   }) => {
     return (
-      <div className={`inline-block px-4 py-1 rounded-full ${bgColor} ${textColor} text-sm font-medium mb-4 backdrop-blur-sm ${className}`}>
+      <div className={`inline-block uppercase px-4 py-1.5 rounded-full ${bgColor} ${textColor} text-xs font-bold mb-4 backdrop-blur-sm ${className}`}>
         {children}
       </div>
     );
